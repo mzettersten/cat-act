@@ -1,0 +1,119 @@
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.column {
+  flex: 33.33%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.jspsych-btn-image-array {
+  border: 1px solid black;
+  align-items: center;
+  padding: 6px 6px;
+  border-radius: 0px;
+  line-height:0;
+  display: inline-block;
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+/* only apply the hover style on devices with a mouse/pointer that can hover - issue #977 */
+@media (hover: hover) {
+  .jspsych-btn-image-array:hover {
+    background-color: #ddd;
+    border-color: #aaa;
+  }
+}
+
+.jspsych-btn-image-array:active {
+  background-color: #ddd;
+  border-color:#000000;
+}
+
+.jspsych-btn-image-array:disabled {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+figure {
+  margin-block-start: 0.4em;
+  margin-block-end: 0.4em;
+
+}
+
+.jspsych-html-button-response-button {
+  border: 5px solid transparent;
+  color: #333;
+  align-items: center;
+}
+
+#html-button-response-catact-submit {
+  border: 5px solid black;
+  font-size: 24px;
+  font-weight: bold; 
+  border-radius: 6px;
+  line-height: 1.4;
+}
+
+.grid-container {
+    border: 0px solid black;
+    display: grid;
+    grid-template-columns: auto auto auto ;
+    grid-template-rows: auto auto auto;
+    width: auto;
+    max-width: 400px;
+    align-items:  center;
+    justify-items: center;
+    padding: 2px;
+    margin: auto;
+    text-align: center;
+}
+
+.grid-container-test {
+    border: 0px solid black;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto;
+    width: auto;
+    max-width: 800px;
+    align-items:  center;
+    justify-items: center;
+    padding: 2px;
+    margin: auto;
+    text-align: center;
+}
+
+ #container {
+   width: auto;
+   max-width: 800px;
+}
+
+#container2 {
+  width: 500px;
+}
+
+figure {
+    margin-inline-start: 10px;
+    margin-inline-end: 10px;
+}
+
+textarea {
+  font-size: 18px;
+}
