@@ -1,0 +1,157 @@
+---
+title: "CatAct V1"
+author: "Martin Zettersten"
+date: "2023-01-17"
+output: html_document
+---
+
+```{r setup}
+library(here)
+library(tidyverse)
+library(ggplot2)
+library(viridisLite)
+library(lme4)
+library(ggstance)
+library(cowplot)
+library(AICcmodavg)
+library(RColorBrewer)
+library(jsonlite)
+
+data_path <- here("..","..","data","v1","processed", "catact-v1-alldata-anonymized.csv")
+figure_path <- here("figures")
+```
+
+# Data Processing
+
+## Read in data
+
+```{r}
+d <- read_csv(data_path)
+```
+
+## Process sampling
+
+```{r}
+# process sampled image
+d <- d %>%
+  mutate(
+    sampled_imagename = str_remove(sampled_image,"stims/"),
+    sampled_imagelabel = str_remove(sampled_imagename,".jpg")
+  ) %>%
+  rowwise() %>%
+  mutate(
+    sampled_category_kind_short = unlist(str_split(sampled_imagelabel,"_"))[1],
+    sampled_category_level = str_replace_all(unlist(str_split(sampled_imagelabel,"_"))[3], "[:digit:]","")
+  ) %>%
+  mutate(
+    sampled_category_kind  = case_when(
+      sampled_category_kind_short == "ani" ~ "animals",
+      sampled_category_kind_short == "veg" ~ "vegetables",
+      sampled_category_kind_short == "veh" ~ "vehicles",
+    )
+  ) %>%
+  mutate(
+    within_category_sample = ifelse(sampled_category_kind == current_category_kind,1,0),
+    within_category_sample_f =  ifelse(sampled_category_kind == current_category_kind,"within-category","other-category"),
+  ) %>%
+  mutate(
+    sampled_category_level_kind_info=ifelse(within_category_sample==0,"outside_category",sampled_category_level)
+  )
+```
+
+## Test data
+
+```{r}
+#unnesting json
+survey_responses <- d %>% 
+  filter(trial_type %in% c("survey-html-form","survey-text","survey-multi-choice","survey-multi-select")) %>%
+  select(subject,trial_type,current_category_training_level,current_category_kind,response) %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  group_by(subject) %>%
+  fill(age,gender,country,language,other_languages,race,education,strategy,choice_strategy,comments,.direction = "downup") %>%
+  select(-response,-trial_type) %>%
+  filter(!is.na(current_category_training_level)) %>%
+  fill(name_check,.direction = "down") %>%
+  fill(word_meaning,.direction = "up") %>%
+  distinct()
+
+d <- d %>%
+  left_join(survey_responses)
+
+
+##converting test array choices
+
+convert_array <- function(json_txt, column_name) {
+  json_txt %>% 
+    gather_array() %>% 
+    rename(index=array.index,stims=..JSON) %>% 
+    as_tibble() %>% 
+    pivot_wider(names_prefix = paste0(column_name,"_"), names_from=index,values_from=stims) %>%
+    select(-document.id)
+}
+
+test_array <- d %>% 
+  filter(trial_type == "html-button-response-catact") %>%
+  select(subject,trial_type,current_category_training_level,current_category_kind,final_choice_array) %>%
+  mutate(choices = map(final_choice_array, ~ convert_array(.,column_name="test_choice"))) %>%
+  unnest(choices)
+
+test_array[is.null(test_array)] = NA
+```
+
+
+
+
+```{r}
+sampling_data <- d %>%
+  filter(trial_type == "html-button-response-catact") %>%
+  select(subject,current_training_images,current_training_label,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
+```
+
+
+
+
+# Descriptive Plots
+
+## 
+
+```{r}
+sampling_data$sampled_category_level_kind_info_ord <- factor(sampling_data$sampled_category_level_kind_info,levels=c("sub","bas","sup","outside_category"))
+
+sampling_data$current_category_training_level_ord <- factor(sampling_data$current_category_training_level,levels=c("narrow","intermediate","broad"))
+
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_category_sample_f,fill=within_category_sample_f))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(type="qual",palette="Set1")+
+  scale_color_brewer(type="qual",palette="Set1")+
+  facet_wrap(~current_category_training_level_ord)+
+  scale_x_discrete(
+    name = "Sampled Category Level",
+    labels = c("subordinate","basic","superordinate","other category")
+  )+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+
+ggsave(here(figure_path,"overall_sampling.pdf"))
+
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_category_sample_f,fill=within_category_sample_f))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(type="qual",palette="Set1")+
+  scale_color_brewer(type="qual",palette="Set1")+
+  facet_wrap(~current_category_training_level_ord+current_category_kind)+
+  scale_x_discrete(
+    name = "Sampled Category Level",
+    labels = c("subordinate","basic","superordinate","other category")
+  )+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+  
+```
+
