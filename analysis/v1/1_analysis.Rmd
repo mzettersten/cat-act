@@ -16,6 +16,7 @@ library(cowplot)
 library(AICcmodavg)
 library(RColorBrewer)
 library(jsonlite)
+library(tidyjson)
 
 data_path <- here("..","..","data","v1","processed", "catact-v1-alldata-anonymized.csv")
 figure_path <- here("figures")
