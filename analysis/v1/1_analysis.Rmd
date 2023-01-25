@@ -17,6 +17,8 @@ library(AICcmodavg)
 library(RColorBrewer)
 library(jsonlite)
 library(tidyjson)
+library(rlang)
+source("helper.R")
 
 data_path <- here("..","..","data","v1","processed", "catact-v1-alldata-anonymized.csv")
 figure_path <- here("figures")
@@ -28,6 +30,72 @@ figure_path <- here("figures")
 
 ```{r}
 d <- read_csv(data_path)
+```
+
+## Process hypernym
+
+```{r}
+temp_sampling_images <- d %>%
+  filter(trial_type == "html-button-response-catact") %>%
+  select(subject,current_training_label,current_category_label_level, current_category_kind,current_category_training_level,shuffled_sampling_images,sampling_image_words) %>%
+  mutate(image_array = map(shuffled_sampling_images, ~ convert_array(.,column_name="image_name"))) %>%
+  unnest(image_array) 
+
+temp_sampling_labels <- d %>%
+  filter(trial_type == "html-button-response-catact") %>%
+  select(subject,current_training_label,current_category_label_level, current_category_kind,current_category_training_level,shuffled_sampling_images,sampling_image_words) %>%
+  mutate(label_array = map(sampling_image_words, ~ convert_array(.,column_name="image_label"))) %>%
+  unnest(label_array)
+
+sampling_assignment_long <- temp_sampling_images %>%
+  left_join(temp_sampling_labels) %>%
+  mutate(
+    image_category  = case_when(
+      str_detect(image_name,"ani") ~ "animals",
+      str_detect(image_name,"veg") ~ "vegetables",
+      str_detect(image_name,"veh") ~ "vehicles",
+    )
+  )
+
+hypernym_categories <- sampling_assignment_long %>%
+  filter(current_category_label_level=="hypernym") %>%
+  mutate(
+    hypernym_category = case_when(
+      current_training_label == image_label &
+        image_category != current_category_kind ~ image_category
+    )
+  ) %>%
+  filter(!is.na(hypernym_category)) %>%
+  distinct(subject,current_training_label,current_category_label_level, current_category_kind,current_category_training_level,hypernym_category)
+
+d <- d %>%
+  left_join(hypernym_categories) %>%
+  relocate(hypernym_category,.after = current_category_kind)
+  
+  
+```
+
+
+
+## Process survey/ nested responses
+
+```{r}
+#unnesting json
+survey_responses <- d %>% 
+  filter(trial_type %in% c("survey-html-form","survey-text","survey-multi-choice","survey-multi-select")) %>%
+  select(subject,trial_type,current_category_training_level,current_category_kind,response) %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  group_by(subject) %>%
+  fill(age,gender,country,language,other_languages,race,education,strategy,choice_strategy,comments,.direction = "downup") %>%
+  select(-response,-trial_type) %>%
+  filter(!is.na(current_category_training_level)) %>%
+  fill(name_check,.direction = "down") %>%
+  fill(word_meaning,.direction = "up") %>%
+  distinct()
+
+d <- d %>%
+  left_join(survey_responses)
 ```
 
 ## Process sampling
@@ -60,62 +128,157 @@ d <- d %>%
   )
 ```
 
-## Test data
-
-```{r}
-#unnesting json
-survey_responses <- d %>% 
-  filter(trial_type %in% c("survey-html-form","survey-text","survey-multi-choice","survey-multi-select")) %>%
-  select(subject,trial_type,current_category_training_level,current_category_kind,response) %>%
-  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
-  unnest(json) %>%
-  group_by(subject) %>%
-  fill(age,gender,country,language,other_languages,race,education,strategy,choice_strategy,comments,.direction = "downup") %>%
-  select(-response,-trial_type) %>%
-  filter(!is.na(current_category_training_level)) %>%
-  fill(name_check,.direction = "down") %>%
-  fill(word_meaning,.direction = "up") %>%
-  distinct()
-
-d <- d %>%
-  left_join(survey_responses)
-
-
-##converting test array choices
-
-convert_array <- function(json_txt, column_name) {
-  json_txt %>% 
-    gather_array() %>% 
-    rename(index=array.index,stims=..JSON) %>% 
-    as_tibble() %>% 
-    pivot_wider(names_prefix = paste0(column_name,"_"), names_from=index,values_from=stims) %>%
-    select(-document.id)
-}
-
-test_array <- d %>% 
-  filter(trial_type == "html-button-response-catact") %>%
-  select(subject,trial_type,current_category_training_level,current_category_kind,final_choice_array) %>%
-  mutate(choices = map(final_choice_array, ~ convert_array(.,column_name="test_choice"))) %>%
-  unnest(choices)
-
-test_array[is.null(test_array)] = NA
-```
-
-
-
-
 ```{r}
 sampling_data <- d %>%
   filter(trial_type == "html-button-response-catact") %>%
   select(subject,current_training_images,current_training_label,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
+
+#categorizing choice types
+sampling_data <- sampling_data %>%
+  mutate(
+    sampling_choice_consistent = case_when(
+      current_category_training_level == "narrow" & sampled_category_level_kind_info == "sub" ~ "consistent",
+      current_category_training_level == "intermediate" & sampled_category_level_kind_info == "sub" ~ "consistent",
+      current_category_training_level == "intermediate" & sampled_category_level_kind_info == "bas" ~ "consistent",
+      current_category_training_level == "broad" & sampled_category_level_kind_info == "sub" ~ "consistent",
+      current_category_training_level == "broad" & sampled_category_level_kind_info == "bas" ~ "consistent",
+      current_category_training_level == "broad" & sampled_category_level_kind_info == "sup" ~ "consistent",
+      TRUE ~ "inconsistent"
+    ),
+    sampling_choice_narrowly_constraining = case_when(
+      current_category_training_level == "narrow" & sampled_category_level_kind_info == "bas" ~ "constraining",
+      current_category_training_level == "intermediate" & sampled_category_level_kind_info == "sup" ~ "constraining",
+      current_category_training_level == "broad" & sampled_category_level_kind_info == "outside_category" ~ "constraining",
+      TRUE ~ sampling_choice_consistent
+    )
+  )
+
 ```
 
+## Test data
 
+```{r}
+test_array <- d %>% 
+  filter(trial_type == "html-button-response-catact") %>%
+  select(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,final_choice_array) %>%
+  mutate(choices = map(final_choice_array, ~ convert_array(.,column_name="test_choice"))) %>%
+  unnest(choices) 
+
+test_array_clean <- test_array %>%
+  mutate(
+    test_choice_type = case_when(
+      str_detect(test_choice,"sup") ~ "superordinate",
+      str_detect(test_choice,"bas") ~ "basic",
+      str_detect(test_choice,"sub") ~ "subordinate"
+    )
+  ) %>%
+  mutate(
+    test_choice_category = case_when(
+      str_detect(test_choice,"ani") ~ "animals",
+      str_detect(test_choice,"veg") ~ "vegetables",
+      str_detect(test_choice,"veh") ~ "vehicles"
+    )
+  ) %>%
+  mutate(
+    test_choice_match_category = ifelse(test_choice_category == current_category_kind,1,0),
+    test_choice_match_ground_truth_category = case_when(
+      current_category_label_level == "hypernym" & test_choice_category == hypernym_category ~ 1,
+      test_choice_category == current_category_kind ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    test_choice_type_training_consistent = case_when(
+      current_category_training_level == "narrow" &  test_choice_type %in% c("subordinate") & test_choice_match_category == 1 ~ 1,
+      current_category_training_level == "intermediate" &  test_choice_type %in% c("subordinate","basic") & test_choice_match_category == 1 ~ 1,
+      current_category_training_level == "broad" &  test_choice_type %in% c("subordinate","basic","superordinate")& test_choice_match_category == 1 ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    test_choice_type_label_consistent = case_when(
+      current_category_label_level == "narrow" &  test_choice_type %in% c("subordinate") & test_choice_match_category == 1 ~ 1,
+      current_category_label_level == "intermediate" &  test_choice_type %in% c("subordinate","basic") & test_choice_match_category == 1 ~ 1,
+      current_category_label_level == "broad" & test_choice_match_category == 1 ~ 1,
+      current_category_label_level == "hypernym" &  test_choice_match_ground_truth_category == 1 ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    total_number_correct_options = case_when(
+      current_category_label_level == "narrow" ~ 2,
+      current_category_label_level == "intermediate" ~ 4,
+      current_category_label_level == "broad" ~ 8,
+      current_category_label_level == "hypernym" ~ 16
+    )
+  )
+
+subj_test_accuracy <- test_array_clean %>%
+  group_by(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options) %>%
+  summarize(
+    total_choices = n(),
+    ground_truth_correct_choices = sum(test_choice_type_label_consistent),
+    ground_truth_incorrect_choices = sum(test_choice_type_label_consistent==0),
+    training_consistent_choices = sum(test_choice_type_training_consistent),
+    training_inconsistent_choices = sum(test_choice_type_training_consistent==0),
+    training_category_match_subordinate_choices = sum(test_choice_match_category==1 & test_choice_type == "subordinate"),
+    training_category_match_basic_choices = sum(test_choice_match_category==1 & test_choice_type == "basic"),
+    training_category_match_superordinate_choices = sum(test_choice_match_category==1 & test_choice_type == "superordinate"),
+    training_category_match_subordinate_percent = training_category_match_subordinate_choices/2,
+    training_category_match_basic_percent = training_category_match_basic_choices/2,
+    training_category_match_superordinate_percent = training_category_match_superordinate_choices/4
+  )
+
+subj_test_accuracy_long <- subj_test_accuracy %>%
+  select(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options,training_category_match_subordinate_percent,training_category_match_basic_percent,training_category_match_superordinate_percent) %>%
+  group_by(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options) %>%
+  pivot_longer(cols=training_category_match_subordinate_percent:training_category_match_superordinate_percent,names_to = "choice_type",values_to = "percent_chosen")
+
+subj_test_accuracy_long <- subj_test_accuracy_long %>%
+  left_join(sampling_data)
+
+overall_accuracy <- subj_test_accuracy_long %>%
+  ungroup() %>%
+  group_by(current_category_training_level,choice_type) %>%
+summarize(
+  N=n(),
+  average_percent=mean(percent_chosen)
+) %>%
+  mutate(
+    choice_type = str_remove(choice_type,"training_category_match_"),
+    choice_type = str_remove(choice_type,"_percent")
+  )
+
+overall_accuracy_label_level <- subj_test_accuracy_long %>%
+  ungroup() %>%
+  group_by(current_category_training_level,current_category_label_level,choice_type) %>%
+summarize(
+  N=n(),
+  average_percent=mean(percent_chosen)
+) %>%
+  mutate(
+    choice_type = str_remove(choice_type,"training_category_match_"),
+    choice_type = str_remove(choice_type,"_percent")
+  )
+
+overall_accuracy_label_level_sampling <- subj_test_accuracy_long %>%
+  ungroup() %>%
+  group_by(sampling_choice_narrowly_constraining,current_category_training_level,current_category_label_level,choice_type,) %>%
+summarize(
+  N=n(),
+  average_percent=mean(percent_chosen)
+) %>%
+  mutate(
+    choice_type = str_remove(choice_type,"training_category_match_"),
+    choice_type = str_remove(choice_type,"_percent")
+  )
+  
+```
 
 
 # Descriptive Plots
 
-## 
+## Sampling
 
 ```{r}
 sampling_data$sampled_category_level_kind_info_ord <- factor(sampling_data$sampled_category_level_kind_info,levels=c("sub","bas","sup","outside_category"))
@@ -153,6 +316,54 @@ ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_cat
            axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
   theme(legend.position="none")+
   ylab("Number of Choices")
+```
+
+## Test
+
+```{r}
+overall_accuracy$choice_type_ord <- factor(overall_accuracy$choice_type,levels=c("subordinate","basic","superordinate"))
+
+overall_accuracy$current_category_training_level_ord <- factor(overall_accuracy$current_category_training_level,levels=c("narrow","intermediate","broad"))
+
+overall_accuracy_label_level$choice_type_ord <- factor(overall_accuracy_label_level$choice_type,levels=c("subordinate","basic","superordinate"))
+
+overall_accuracy_label_level$current_category_label_level_ord <- factor(overall_accuracy_label_level$current_category_label_level,levels=c("narrow","intermediate","broad","hypernym"))
+
+ggplot(overall_accuracy, aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p1 <- ggplot(filter(overall_accuracy_label_level,current_category_training_level=="narrow"), aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level+current_category_label_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p2 <- ggplot(filter(overall_accuracy_label_level,current_category_training_level=="intermediate"), aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level+current_category_label_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p3 <- ggplot(filter(overall_accuracy_label_level,current_category_training_level=="broad"), aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level+current_category_label_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+plot_grid(p1,p2,p3,nrow=3)
   
+```
+
+## Sampling & Test
+
+```{r}
+
 ```
 
