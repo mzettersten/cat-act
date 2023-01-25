@@ -275,6 +275,150 @@ summarize(
   
 ```
 
+## Test data - all images
+
+```{r}
+test_array_options <- d %>% 
+  filter(trial_type == "html-button-response-catact") %>%
+  select(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,shuffled_test_images,final_choice_array) %>%
+  mutate(test_options = map(shuffled_test_images, ~ convert_array(.,column_name="test_image"))) %>%
+  unnest(test_options) 
+
+test_array_options <- test_array_options %>%
+  mutate(
+    is_chosen = case_when(
+      str_detect(final_choice_array,test_image) ~ 1,
+      TRUE ~ 0
+  )
+  )
+
+test_array_options_clean <- test_array_options %>%
+  mutate(
+    test_image_type = case_when(
+      str_detect(test_image,"sup") ~ "superordinate",
+      str_detect(test_image,"bas") ~ "basic",
+      str_detect(test_image,"sub") ~ "subordinate"
+    )
+  ) %>%
+  mutate(
+    test_image_category = case_when(
+      str_detect(test_image,"ani") ~ "animals",
+      str_detect(test_image,"veg") ~ "vegetables",
+      str_detect(test_image,"veh") ~ "vehicles"
+    )
+  ) %>%
+  mutate(
+    test_image_match_category = ifelse(test_image_category == current_category_kind,1,0),
+    test_image_match_ground_truth_category = case_when(
+      current_category_label_level == "hypernym" & test_image_category == hypernym_category ~ 1,
+      test_image_category == current_category_kind ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    test_image_type_training_consistent = case_when(
+      current_category_training_level == "narrow" &  test_image_type %in% c("subordinate") & test_image_match_category == 1 ~ 1,
+      current_category_training_level == "intermediate" &  test_image_type %in% c("subordinate","basic") & test_image_match_category == 1 ~ 1,
+      current_category_training_level == "broad" &  test_image_type %in% c("subordinate","basic","superordinate")& test_image_match_category == 1 ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    test_image_type_label_consistent = case_when(
+      current_category_label_level == "narrow" &  test_image_type %in% c("subordinate") & test_image_match_category == 1 ~ 1,
+      current_category_label_level == "intermediate" &  test_image_type %in% c("subordinate","basic") & test_image_match_category == 1 ~ 1,
+      current_category_label_level == "broad" & test_image_match_category == 1 ~ 1,
+      current_category_label_level == "hypernym" &  test_image_match_ground_truth_category == 1 ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    total_number_correct_options_label = case_when(
+      current_category_label_level == "narrow" ~ 2,
+      current_category_label_level == "intermediate" ~ 4,
+      current_category_label_level == "broad" ~ 8,
+      current_category_label_level == "hypernym" ~ 16
+    ),
+    total_number_correct_options_training = case_when(
+      current_category_training_level == "narrow" ~ 2,
+      current_category_training_level == "intermediate" ~ 4,
+      current_category_training_level == "broad" ~ 8
+    )
+  ) %>%
+  mutate(
+    is_match_to_training = case_when(
+      test_image_type_training_consistent == is_chosen ~ 1,
+      TRUE ~ 0
+    ),
+    is_match_to_label = case_when(
+      test_image_type_label_consistent == is_chosen ~ 1,
+      TRUE ~ 0
+    ),
+    label_matches_training = case_when(
+      current_category_training_level == current_category_label_level ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    hit_training = ifelse(test_image_type_training_consistent == 1, is_match_to_training,NA),
+    hit_label = ifelse(test_image_type_label_consistent == 1, is_match_to_label,NA),
+    false_alarm_training = ifelse(test_image_type_training_consistent == 0,1-is_match_to_training,NA),
+    false_alarm_label = ifelse(test_image_type_label_consistent == 0,1-is_match_to_label,NA),
+  )
+
+subj_test_accuracy_all <- test_array_options_clean %>%
+  group_by(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options_label,total_number_correct_options_training) %>%
+  summarize(
+    accuracy_training = mean(is_match_to_training, na.rm=TRUE),
+    accuracy_label = mean(is_match_to_label,na.rm=TRUE),
+    hit_rate_training = mean(hit_training,na.rm=TRUE),
+    hit_rate_label = mean(hit_label,na.rm=TRUE),
+    false_alarm_rate_training = mean(false_alarm_training,na.rm=TRUE),
+    false_alarm_rate_label = mean(false_alarm_label,na.rm=TRUE)
+  ) %>%
+  mutate(
+    hit_rate_training_adj= case_when(
+      hit_rate_training==1 ~ 1 - 1/(2*total_number_correct_options_training),
+      hit_rate_training==0 ~ 1/(2*total_number_correct_options_training),
+      TRUE ~ hit_rate_training
+    ),
+    hit_rate_label_adj= case_when(
+      hit_rate_label==1 ~ 1 - 1/(2*total_number_correct_options_label),
+      hit_rate_label==0 ~ 1/(2*total_number_correct_options_label),
+      TRUE ~ hit_rate_label
+    ),
+    false_alarm_rate_training_adj= case_when(
+      false_alarm_rate_training==0 ~ 1/(2*total_number_correct_options_training),
+      false_alarm_rate_training==1 ~ 1 - 1/(2*total_number_correct_options_training),
+      TRUE ~ false_alarm_rate_training
+    ),
+    false_alarm_rate_label_adj= case_when(
+      false_alarm_rate_label==0 ~ 1/(2*total_number_correct_options_label),
+      false_alarm_rate_label==1 ~ 1 - 1/(2*total_number_correct_options_label),
+      TRUE ~ false_alarm_rate_label
+    )
+  ) %>%
+  mutate(
+    dprime_training=qnorm(hit_rate_training_adj) - qnorm(false_alarm_rate_training_adj),
+    dprime_label=qnorm(hit_rate_label_adj) - qnorm(false_alarm_rate_label_adj),
+    c_training=-.5*(qnorm(hit_rate_training_adj) + qnorm(false_alarm_rate_training_adj)),
+    c_label=-.5*(qnorm(hit_rate_label_adj) + qnorm(false_alarm_rate_label_adj)))
+
+
+
+subj_test_accuracy_all <- subj_test_accuracy_all %>%
+  left_join(sampling_data)
+
+overall_accuracy_label_level_sampling_all <- subj_test_accuracy_all %>%
+  ungroup() %>%
+  group_by(sampling_choice_narrowly_constraining,current_category_training_level,current_category_label_level) %>%
+summarize(
+  N=n(),
+  average_dprime_training=mean(dprime_training),
+  average_dprime_label=mean(dprime_label)
+) 
+```
+
 
 # Descriptive Plots
 
@@ -364,6 +508,20 @@ plot_grid(p1,p2,p3,nrow=3)
 ## Sampling & Test
 
 ```{r}
+ggplot(overall_accuracy_label_level_sampling_all,aes(sampling_choice_narrowly_constraining,average_dprime_training))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~current_category_training_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
 
+ggplot(overall_accuracy_label_level_sampling_all,aes(sampling_choice_narrowly_constraining,average_dprime_label))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
 ```
 
