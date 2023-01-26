@@ -1,0 +1,367 @@
+---
+title: "CatAct V1"
+author: "Martin Zettersten"
+date: "2023-01-17"
+output: html_document
+---
+
+```{r setup}
+library(here)
+library(tidyverse)
+library(ggplot2)
+library(viridisLite)
+library(lme4)
+library(ggstance)
+library(cowplot)
+library(AICcmodavg)
+library(RColorBrewer)
+library(jsonlite)
+library(tidyjson)
+library(rlang)
+library(car)
+source("helper.R")
+
+data_path <- here("..","..","data","v1","processed", "catact-v1-alldata-anonymized.csv")
+figure_path <- here("figures")
+```
+
+# Data Processing
+
+## Read in data
+
+```{r}
+d <- read_csv(data_path)
+```
+
+
+# Descriptive Plots
+
+## Sampling
+
+```{r}
+sampling_data$sampled_category_level_kind_info_ord <- factor(sampling_data$sampled_category_level_kind_info,levels=c("sub","bas","sup","outside_category"))
+
+sampling_data$current_category_training_level_ord <- factor(sampling_data$current_category_training_level,levels=c("narrow","intermediate","broad"))
+
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_category_sample_f,fill=within_category_sample_f))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(type="qual",palette="Set1")+
+  scale_color_brewer(type="qual",palette="Set1")+
+  facet_wrap(~current_category_training_level_ord)+
+  scale_x_discrete(
+    name = "Sampled Category Level",
+    labels = c("subordinate","basic","superordinate","other category")
+  )+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+
+ggsave(here(figure_path,"overall_sampling.pdf"))
+
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_category_sample_f,fill=within_category_sample_f))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(type="qual",palette="Set1")+
+  scale_color_brewer(type="qual",palette="Set1")+
+  facet_wrap(~current_category_training_level_ord+current_category_kind)+
+  scale_x_discrete(
+    name = "Sampled Category Level",
+    labels = c("subordinate","basic","superordinate","other category")
+  )+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+```
+
+## Test
+
+```{r}
+overall_accuracy$choice_type_ord <- factor(overall_accuracy$choice_type,levels=c("subordinate","basic","superordinate"))
+
+overall_accuracy$current_category_training_level_ord <- factor(overall_accuracy$current_category_training_level,levels=c("narrow","intermediate","broad"))
+
+overall_accuracy_label_level$choice_type_ord <- factor(overall_accuracy_label_level$choice_type,levels=c("subordinate","basic","superordinate"))
+
+overall_accuracy_label_level$current_category_label_level_ord <- factor(overall_accuracy_label_level$current_category_label_level,levels=c("narrow","intermediate","broad","hypernym"))
+
+ggplot(overall_accuracy, aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p1 <- ggplot(filter(overall_accuracy_label_level,current_category_training_level=="narrow"), aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level+current_category_label_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p2 <- ggplot(filter(overall_accuracy_label_level,current_category_training_level=="intermediate"), aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level+current_category_label_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p3 <- ggplot(filter(overall_accuracy_label_level,current_category_training_level=="broad"), aes(choice_type_ord,average_percent))+
+  geom_bar(stat="identity")+
+  facet_wrap(~current_category_training_level+current_category_label_level_ord)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+plot_grid(p1,p2,p3,nrow=3)
+  
+```
+
+## Sampling & Test
+
+```{r}
+ggplot(subj_test_accuracy_all,aes(sampling_choice_narrowly_constraining,dprime_training))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~current_category_training_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+ggplot(subj_test_accuracy_all,aes(sampling_choice_narrowly_constraining,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+ggplot(subj_test_accuracy_all,aes(sampling_choice_narrowly_constraining,accuracy_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+ggplot(overall_accuracy_label_level_sampling_all,aes(sampling_choice_narrowly_constraining,average_dprime_training))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~current_category_training_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+ggplot(overall_accuracy_label_level_sampling_all,aes(sampling_choice_narrowly_constraining,average_dprime_label))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p1 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="narrow"),aes(sampling_choice_narrowly_constraining,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p2 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="intermediate"),aes(sampling_choice_narrowly_constraining,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p3 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="broad"),aes(sampling_choice_narrowly_constraining,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p1 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="narrow"),aes(sampling_choice_narrowly_constraining,accuracy_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p2 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="intermediate"),aes(sampling_choice_narrowly_constraining,accuracy_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p3 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="broad"),aes(sampling_choice_narrowly_constraining,accuracy_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+ggplot(subj_test_accuracy_all,aes(sampling_choice_narrowly_constraining,accuracy_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+
+
+p1 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="narrow"),aes(sampling_choice_consistent,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p2 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="intermediate"),aes(sampling_choice_consistent,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+
+p3 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="broad"),aes(sampling_choice_consistent,dprime_label))+
+  geom_boxplot()+
+  geom_jitter(alpha=0.2)+
+  facet_wrap(~current_category_training_level+current_category_label_level)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))
+```
+
+## Models
+
+### Sampling
+
+```{r}
+sampling_data <- sampling_data %>%
+  mutate(
+    chance_consistent = case_when(
+      current_category_training_level == "narrow" ~ 1/9,
+      current_category_training_level == "intermediate" ~ 2/9,
+      current_category_training_level == "broad" ~ 3/9,
+    ),
+    chance_narrowly_constraining = case_when(
+      current_category_training_level == "narrow" ~ 1/9,
+      current_category_training_level == "intermediate" ~ 1/9,
+      current_category_training_level == "broad" ~ 6/9,
+    )
+  ) %>%
+  mutate(
+    sampling_choice_consistent_b = ifelse(sampling_choice_consistent=="consistent",1,0),
+    sampling_choice_narrow_constraining_b = ifelse(sampling_choice_narrowly_constraining=="constraining",1,0),
+  )
+
+#consistent
+m <- glmer(sampling_choice_consistent_b~offset(logit(chance_consistent))+(1|subject), data=sampling_data, family=binomial)
+summary(m)
+
+m <- glmer(sampling_choice_consistent_b~offset(logit(chance_consistent))+current_category_training_level+(1|subject), data=sampling_data, family=binomial)
+summary(m)
+Anova(m,type="III")
+
+ggplot(sampling_data,aes(current_category_training_level_ord,sampling_choice_consistent_b))+
+  stat_summary()
+
+#constraining
+m <- glmer(sampling_choice_narrow_constraining_b~offset(logit(chance_narrowly_constraining))+(1|subject), data=sampling_data, family=binomial)
+summary(m)
+
+m <- glmer(sampling_choice_narrow_constraining_b~offset(logit(chance_narrowly_constraining))+current_category_training_level+(1|subject), data=sampling_data, family=binomial)
+summary(m)
+Anova(m,type="III")
+
+m <- glmer(sampling_choice_narrow_constraining_b~offset(logit(chance_narrowly_constraining))+(1|subject), data=filter(sampling_data,current_category_training_level != "broad"), family=binomial)
+summary(m)
+
+ggplot(sampling_data,aes(current_category_training_level_ord,sampling_choice_narrow_constraining_b))+
+  stat_summary()+
+  facet_wrap(~current_category_kind)
+
+ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampling_choice_narrowly_constraining))+
+  geom_bar(position="fill")
+
+ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
+  geom_bar(position="fill")
+
+subj_sampling <- sampling_data %>%
+  group_by(subject) %>%
+  summarize(
+    mean_consistent=mean(sampling_choice_consistent_b),
+    mean_narrowly_constraining = mean(sampling_choice_narrow_constraining_b),
+    mean_outside_category=mean(sampled_category_level_kind_info=="outside_category"))
+
+subj_test_accuracy_all <- subj_test_accuracy_all %>%
+  left_join(subj_sampling)
+
+ggplot(subj_test_accuracy_all,aes(mean_consistent,dprime_label))+
+  geom_point()+
+  geom_smooth(method="lm",se=FALSE,aes(color=current_category_training_level))+
+  geom_smooth(method="lm")
+
+m <- lmer(dprime_label~ mean_consistent+(1+mean_consistent|subject),data=subj_test_accuracy_all)
+summary(m)
+
+ggplot(subj_test_accuracy_all,aes(mean_narrowly_constraining,dprime_label))+
+  geom_point()+
+  geom_smooth(method="lm",se=FALSE,aes(color=current_category_training_level))+
+  geom_smooth(method="lm")
+
+m <- lmer(dprime_label~ mean_narrowly_constraining+(1+mean_narrowly_constraining|subject),data=subj_test_accuracy_all)
+summary(m)
+
+ggplot(subj_test_accuracy_all,aes(mean_outside_category,dprime_label))+
+  geom_point()+
+  geom_smooth(method="lm",se=FALSE,aes(color=current_category_training_level))+
+  geom_smooth(method="lm")
+
+m <- lmer(dprime_label~ mean_outside_category+(1+mean_outside_category|subject),data=subj_test_accuracy_all)
+summary(m)
+
+
+```
+
+
+### Test
+
+```{r}
+m <- glmer(is_chosen ~ current_category_training_level + current_category_kind + (1+current_category_training_level|subject)+(1|test_image), data=test_array_options,family=binomial)
+summary(m)
+Anova(m,type="III")
+
+m <- glmer(is_chosen ~ current_category_training_level * current_category_label_level * current_category_kind + (1|subject)+(1|test_image), data=test_array_options,family=binomial)
+summary(m)
+Anova(m,type="III")
+```
+
+### Sampling Test
+
+```{r}
+m <- lmer(accuracy_label~1+sampling_choice_narrowly_constraining+(1+sampling_choice_narrowly_constraining|subject),data=filter(subj_test_accuracy_all,sampling_choice_narrowly_constraining!="inconsistent"))
+summary(m)
+
+m <- glmer(is_match_to_label~1+sampling_choice_narrowly_constraining+(1+sampling_choice_narrowly_constraining|subject),data=filter(test_array_options_clean,sampling_choice_narrowly_constraining!="inconsistent"),family=binomial)
+summary(m)
+
+m <- glmer(is_match_to_label~1+sampling_choice_consistent+(1+sampling_choice_consistent|subject),data=test_array_options_clean,family=binomial)
+summary(m)
+
+m <- glmer(is_match_to_label~1+sampling_choice_consistent*current_category_training_level+(1+sampling_choice_consistent*current_category_training_level|subject),data=test_array_options_clean,family=binomial)
+summary(m)
+```
+
