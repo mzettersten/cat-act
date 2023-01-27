@@ -7,7 +7,7 @@ source("helper.R")
 
 data_path <- here("..","..","data","v1","processed", "catact-v1-alldata.csv")
 cloud_path <- here("..","..","data","v1","processed","catact_v1_cloudresearch_submissions.csv")
-qualtrics_path <- here("..","..","data","v1","processed","CatAct_V1_January 26, 2023_14.09_processed.csv")
+qualtrics_path <- here("..","..","data","v1","processed","CatAct V1_January 26, 2023_21.52_processed.csv")
 
 #### read in data ####
 d <- read_csv(data_path)

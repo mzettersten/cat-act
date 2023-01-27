@@ -7,6 +7,7 @@ library(stringdist)
 source("helper.R")
 
 data_path <- here("..","..","data","v1","processed", "catact-v1-alldata-anonymized.csv")
+write_path <- here("..","..","data","v1","processed")
 
 #### read in data ####
 d <- read_csv(data_path)
@@ -182,9 +183,7 @@ d <- d %>%
   left_join(hypernym_categories) %>%
   relocate(hypernym_category,.after = current_category_kind)
 
-
-
-#### Process Sampling ####
+#### process sampling data ####
 # process sampled image
 d <- d %>%
   mutate(
@@ -213,7 +212,7 @@ d <- d %>%
 
 sampling_data <- d %>%
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,current_training_images,current_training_label,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
+  select(subject,exclude_participant,current_training_images,current_training_label,name_check,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
 
 #categorizing choice types
 sampling_data <- sampling_data %>%
@@ -233,12 +232,39 @@ sampling_data <- sampling_data %>%
       current_category_training_level == "broad" & sampled_category_level_kind_info == "outside_category" ~ "constraining",
       TRUE ~ sampling_choice_consistent
     )
+  ) %>%
+  #add levenshtein distance
+  mutate(name_check_edited = trimws(tolower(name_check))) %>%
+  mutate(
+    levenshtein_distance = stringdist(current_training_label,name_check_edited)
   )
 
-#### Test data ####
+#adding chance levels
+sampling_data <- sampling_data %>%
+  mutate(
+    chance_consistent = case_when(
+      current_category_training_level == "narrow" ~ 1/9,
+      current_category_training_level == "intermediate" ~ 2/9,
+      current_category_training_level == "broad" ~ 3/9,
+    ),
+    chance_narrowly_constraining = case_when(
+      current_category_training_level == "narrow" ~ 1/9,
+      current_category_training_level == "intermediate" ~ 1/9,
+      current_category_training_level == "broad" ~ 6/9,
+    )
+  ) %>%
+  mutate(
+    sampling_choice_consistent_b = ifelse(sampling_choice_consistent=="consistent",1,0),
+    sampling_choice_narrow_constraining_b = ifelse(sampling_choice_narrowly_constraining=="constraining",1,0),
+  )
+
+# write sampling data
+write_csv(sampling_data,here(write_path,"catact-v1-sampling-data.csv"))
+
+#### test data ####
 test_array <- d %>% 
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,final_choice_array) %>%
+  select(subject,exclude_participant,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,final_choice_array) %>%
   mutate(choices = map(final_choice_array, ~ convert_array(.,column_name="test_choice"))) %>%
   unnest(choices) 
 
@@ -291,72 +317,18 @@ test_array_clean <- test_array %>%
     )
   )
 
-subj_test_accuracy <- test_array_clean %>%
-  group_by(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options) %>%
-  summarize(
-    total_choices = n(),
-    ground_truth_correct_choices = sum(test_choice_type_label_consistent),
-    ground_truth_incorrect_choices = sum(test_choice_type_label_consistent==0),
-    training_consistent_choices = sum(test_choice_type_training_consistent),
-    training_inconsistent_choices = sum(test_choice_type_training_consistent==0),
-    training_category_match_subordinate_choices = sum(test_choice_match_category==1 & test_choice_type == "subordinate"),
-    training_category_match_basic_choices = sum(test_choice_match_category==1 & test_choice_type == "basic"),
-    training_category_match_superordinate_choices = sum(test_choice_match_category==1 & test_choice_type == "superordinate"),
-    training_category_match_subordinate_percent = training_category_match_subordinate_choices/2,
-    training_category_match_basic_percent = training_category_match_basic_choices/2,
-    training_category_match_superordinate_percent = training_category_match_superordinate_choices/4
-  )
-
-subj_test_accuracy_long <- subj_test_accuracy %>%
-  select(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options,training_category_match_subordinate_percent,training_category_match_basic_percent,training_category_match_superordinate_percent) %>%
-  group_by(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options) %>%
-  pivot_longer(cols=training_category_match_subordinate_percent:training_category_match_superordinate_percent,names_to = "choice_type",values_to = "percent_chosen")
-
-subj_test_accuracy_long <- subj_test_accuracy_long %>%
+#join with sampling data
+test_array_clean <- test_array_clean %>%
   left_join(sampling_data)
 
-overall_accuracy <- subj_test_accuracy_long %>%
-  ungroup() %>%
-  group_by(current_category_training_level,choice_type) %>%
-  summarize(
-    N=n(),
-    average_percent=mean(percent_chosen)
-  ) %>%
-  mutate(
-    choice_type = str_remove(choice_type,"training_category_match_"),
-    choice_type = str_remove(choice_type,"_percent")
-  )
-
-overall_accuracy_label_level <- subj_test_accuracy_long %>%
-  ungroup() %>%
-  group_by(current_category_training_level,current_category_label_level,choice_type) %>%
-  summarize(
-    N=n(),
-    average_percent=mean(percent_chosen)
-  ) %>%
-  mutate(
-    choice_type = str_remove(choice_type,"training_category_match_"),
-    choice_type = str_remove(choice_type,"_percent")
-  )
-
-overall_accuracy_label_level_sampling <- subj_test_accuracy_long %>%
-  ungroup() %>%
-  group_by(sampling_choice_narrowly_constraining,current_category_training_level,current_category_label_level,choice_type,) %>%
-  summarize(
-    N=n(),
-    average_percent=mean(percent_chosen)
-  ) %>%
-  mutate(
-    choice_type = str_remove(choice_type,"training_category_match_"),
-    choice_type = str_remove(choice_type,"_percent")
-  )
+# write test data (shorter representation)
+write_csv(test_array_clean,here(write_path,"catact-v1-test-data.csv"))
 
 
-#### Test data - all images ####
-
+#### test data - representing all images in long format ####
 test_array_options <- d %>% 
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,shuffled_test_images,final_choice_array) %>%
+  select(subject,exclude_participant,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,shuffled_test_images,final_choice_array) %>%
   mutate(test_options = map(shuffled_test_images, ~ convert_array(.,column_name="test_image"))) %>%
   unnest(test_options) 
 
@@ -443,57 +415,12 @@ test_array_options_clean <- test_array_options %>%
     false_alarm_label = ifelse(test_image_type_label_consistent == 0,1-is_match_to_label,NA),
   )
 
-
+#combine with sampling data
 test_array_options_clean <- test_array_options_clean %>%
   left_join(sampling_data)
 
-subj_test_accuracy_all <- test_array_options_clean %>%
-  group_by(subject,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options_label,total_number_correct_options_training) %>%
-  summarize(
-    accuracy_training = mean(is_match_to_training, na.rm=TRUE),
-    accuracy_label = mean(is_match_to_label,na.rm=TRUE),
-    hit_rate_training = mean(hit_training,na.rm=TRUE),
-    hit_rate_label = mean(hit_label,na.rm=TRUE),
-    false_alarm_rate_training = mean(false_alarm_training,na.rm=TRUE),
-    false_alarm_rate_label = mean(false_alarm_label,na.rm=TRUE)
-  ) %>%
-  mutate(
-    hit_rate_training_adj= case_when(
-      hit_rate_training==1 ~ 1 - 1/(2*total_number_correct_options_training),
-      hit_rate_training==0 ~ 1/(2*total_number_correct_options_training),
-      TRUE ~ hit_rate_training
-    ),
-    hit_rate_label_adj= case_when(
-      hit_rate_label==1 ~ 1 - 1/(2*total_number_correct_options_label),
-      hit_rate_label==0 ~ 1/(2*total_number_correct_options_label),
-      TRUE ~ hit_rate_label
-    ),
-    false_alarm_rate_training_adj= case_when(
-      false_alarm_rate_training==0 ~ 1/(2*total_number_correct_options_training),
-      false_alarm_rate_training==1 ~ 1 - 1/(2*total_number_correct_options_training),
-      TRUE ~ false_alarm_rate_training
-    ),
-    false_alarm_rate_label_adj= case_when(
-      false_alarm_rate_label==0 ~ 1/(2*total_number_correct_options_label),
-      false_alarm_rate_label==1 ~ 1 - 1/(2*total_number_correct_options_label),
-      TRUE ~ false_alarm_rate_label
-    )
-  ) %>%
-  mutate(
-    dprime_training=qnorm(hit_rate_training_adj) - qnorm(false_alarm_rate_training_adj),
-    dprime_label=qnorm(hit_rate_label_adj) - qnorm(false_alarm_rate_label_adj),
-    c_training=-.5*(qnorm(hit_rate_training_adj) + qnorm(false_alarm_rate_training_adj)),
-    c_label=-.5*(qnorm(hit_rate_label_adj) + qnorm(false_alarm_rate_label_adj)))
+# write test data (longer representation)
+write_csv(test_array_options_clean,here(write_path,"catact-v1-test-data-long.csv"))
 
-subj_test_accuracy_all <- subj_test_accuracy_all %>%
-  left_join(sampling_data)
-
-overall_accuracy_label_level_sampling_all <- subj_test_accuracy_all %>%
-  ungroup() %>%
-  group_by(sampling_choice_narrowly_constraining,current_category_training_level,current_category_label_level) %>%
-  summarize(
-    N=n(),
-    average_dprime_training=mean(dprime_training),
-    average_dprime_label=mean(dprime_label)
-  ) 
-
+#write final data set
+write_csv(d,here(write_path,"catact-v1-alldata-processed.csv"))
