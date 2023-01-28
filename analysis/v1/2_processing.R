@@ -212,7 +212,7 @@ d <- d %>%
 
 sampling_data <- d %>%
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,exclude_participant,current_training_images,current_training_label,name_check,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
+  select(subject,exclude_participant,current_training_images,current_training_label,name_check,shuffled_sampling_images,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
 
 #categorizing choice types
 sampling_data <- sampling_data %>%
@@ -260,6 +260,35 @@ sampling_data <- sampling_data %>%
 
 # write sampling data
 write_csv(sampling_data,here(write_path,"catact-v1-sampling-data.csv"))
+
+# representing sampling in long format with all image options
+sampling_data_long <- sampling_data %>%
+  mutate(sampling_options = map(shuffled_sampling_images, ~ convert_array(.,column_name="sampling_image"))) %>%
+  unnest(sampling_options) 
+
+sampling_data_long <- sampling_data_long %>%
+  rowwise() %>%
+  mutate(
+    is_chosen = case_when(
+      sampled_image == sampling_image ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  mutate(
+    sampling_image_type = case_when(
+      str_detect(sampling_image,"sup") ~ "superordinate",
+      str_detect(sampling_image,"bas") ~ "basic",
+      str_detect(sampling_image,"sub") ~ "subordinate"
+    )
+  ) %>%
+  mutate(
+    sampling_image_category = case_when(
+      str_detect(sampling_image,"ani") ~ "animals",
+      str_detect(sampling_image,"veg") ~ "vegetables",
+      str_detect(sampling_image,"veh") ~ "vehicles"
+    )
+  )
+
 
 #### test data ####
 test_array <- d %>% 
