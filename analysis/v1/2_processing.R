@@ -247,10 +247,20 @@ sampling_data <- sampling_data %>%
       current_category_training_level == "intermediate" ~ 2/9,
       current_category_training_level == "broad" ~ 3/9,
     ),
+    chance_consistent_4afc = case_when(
+      current_category_training_level == "narrow" ~ 1/4,
+      current_category_training_level == "intermediate" ~ 2/4,
+      current_category_training_level == "broad" ~ 3/4,
+    ),
     chance_narrowly_constraining = case_when(
       current_category_training_level == "narrow" ~ 1/9,
       current_category_training_level == "intermediate" ~ 1/9,
       current_category_training_level == "broad" ~ 6/9,
+    ),
+    chance_narrowly_constraining_4afc = case_when(
+      current_category_training_level == "narrow" ~ 1/4,
+      current_category_training_level == "intermediate" ~ 1/4,
+      current_category_training_level == "broad" ~ 1/4,
     )
   ) %>%
   mutate(
