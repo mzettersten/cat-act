@@ -440,3 +440,6 @@ data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-01-30_16h22.04.584.csv
 data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-01-30_21h15.19.3.csv
 data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-01-30_23h38.36.218.csv
 data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-01-31_02h51.55.376.csv
+data/v2/processed/CatAct V2_January 31, 2023_16.47_processed.csv
+data/v2/processed/cat_v2_cloudresearch_submissions.csv
+analysis/v1/4_exploration.Rmd

@@ -68,11 +68,12 @@ manage_exclusion_d %>%
 # strategy/ choices/ comments: some likely non-L1 English participants, but no obvious bot-like/ gibberish responses
 # word meaning: some definite strangeness here, marking a few for exclusion
 exclude_open_responses <- c(
-  "p665337",  #very odd word_meaning responses
-  "p753363",   #very odd word_meaning responses
-  "p910597",    #very odd word_meaning responses
-  "p45411", #wildly off word_meaning responses (onion, dogs for the vehicle category)
-  "p563154" #wildly off word_meaning responses (playschool for animal category)
+  "p1740",  #bot entries for word_meaning (googled entries)
+  "p474744", #bot entries for word_meaning (googled entries) 
+  "p600079", #bot entries for word_meaning (googled entries) 
+  "p602", #nonsensical entries for word_meaning
+  "p782790", #nonsensical entries for word_meaning
+  "p889922" #nonsensical entries for word_meaning
 ) 
 
 #2. investigate name check responses

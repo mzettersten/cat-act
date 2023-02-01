@@ -1,5 +1,5 @@
 ---
-title: "CatAct V1"
+title: "CatAct v2"
 author: "Martin Zettersten"
 date: "2023-01-17"
 output: html_document
@@ -20,11 +20,13 @@ library(tidyjson)
 library(rlang)
 library(car)
 source("helper.R")
+library(mlogit)
+library(nnet)
 
-data_path <- here("..","..","data","v1","processed", "catact-v1-alldata-processed.csv")
-sampling_data_path <- here("..","..","data","v1","processed", "catact-v1-sampling-data.csv")
-test_data_path <- here("..","..","data","v1","processed", "catact-v1-test-data.csv")
-test_data_long_path <- here("..","..","data","v1","processed", "catact-v1-test-data-long.csv")
+data_path <- here("..","..","data","v2","processed", "catact-v2-alldata-processed.csv")
+sampling_data_path <- here("..","..","data","v2","processed", "catact-v2-sampling-data.csv")
+test_data_path <- here("..","..","data","v2","processed", "catact-v2-test-data.csv")
+test_data_long_path <- here("..","..","data","v2","processed", "catact-v2-test-data-long.csv")
 figure_path <- here("figures")
 ```
 
@@ -576,7 +578,8 @@ ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampling_choic
   geom_bar(position="fill")
 
 ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
-  geom_bar(position="fill")
+  geom_bar(position="fill")+
+  scale_fill_brewer(palette="RdYlBu")
 
 ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
   geom_bar(position="fill")+
@@ -623,7 +626,7 @@ summary(m)
 
 m <- lmer(dprime_label~ mean_narrowly_constraining*current_category_training_level+(1+mean_narrowly_constraining|subject),data=subj_test_accuracy_all)
 summary(m)
-Anova(m,type="III")
+Anova(m,type="II")
 
 ggplot(subj_test_accuracy_all,aes(mean_outside_category,dprime_label))+
   geom_point()+
@@ -662,7 +665,7 @@ summary(m)
 Anova(m,type="III")
 
 m <- glmer(is_chosen ~ current_category_training_level + test_image_match_category + (1+current_category_training_level+ test_image_match_category|subject)+(1|test_image), data=test_array_options_clean,family=binomial,glmerControl(optimizer="bobyqa"))
- summary(m)
+summary(m)
 Anova(m,type="III")
 
 m <- glmer(is_chosen ~ current_category_training_level * current_category_label_level * current_category_kind + (1|subject)+(1|test_image), data=test_array_options,family=binomial)
