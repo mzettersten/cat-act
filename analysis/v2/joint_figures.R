@@ -155,7 +155,7 @@ p2 <- ggplot(filter(overall_test_prop_long,version==2),aes(choice_type_ord,avg_p
   theme(legend.position="none")
 p2
 plot_grid(p1,p2,ncol=1,labels=c("A","B"),label_size=24)
-ggsave(here(figure_path,"test_choices_exps1_2.pdf"),width=6,height=12)
+ggsave(here(figure_path,"test_choices_exps1_2.pdf"),width=6,height=11)
 
 ## Relationship between Test and Sampling
 
