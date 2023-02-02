@@ -41,7 +41,7 @@ test_array_clean <- read_csv(test_data_path)
 test_array_options_clean <- read_csv(test_data_long_path)
 ```
 
-## handle exclusions
+## Handle exclusions
 
 ```{r}
 d <- d %>%
@@ -389,7 +389,7 @@ p3 <- ggplot(filter(subj_test_accuracy_all,current_category_training_level=="bro
 
 ### Sampling
 
-#### training-sensitivity in general
+#### Does training manipulation have an overall effect?
 
 ```{r}
 sampling_data <- sampling_data %>%

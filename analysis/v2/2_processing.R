@@ -71,6 +71,7 @@ exclude_open_responses <- c(
   "p1740",  #bot entries for word_meaning (googled entries)
   "p474744", #bot entries for word_meaning (googled entries) 
   "p600079", #bot entries for word_meaning (googled entries) 
+  "p218152", #bot-like entries for word_meaning (appears to use the alternate label)
   "p602", #nonsensical entries for word_meaning
   "p782790", #nonsensical entries for word_meaning
   "p889922" #nonsensical entries for word_meaning
