@@ -1,11 +1,11 @@
 ---
 title: "CatAct V1"
-author: "Martin Zettersten"
+author: "Removed"
 date: "2023-01-17"
 output: html_document
 ---
 
-```{r setup}
+```{r setup, warning=FALSE, message=F}
 library(here)
 library(tidyverse)
 library(ggplot2)
@@ -35,16 +35,16 @@ figure_path <- here("figures")
 
 ## Read in data
 
-```{r}
+```{r, warning=FALSE, message=F}
 d <- read_csv(data_path)
 sampling_data <- read_csv(sampling_data_path)
 test_array_clean <- read_csv(test_data_path)
 test_array_options_clean <- read_csv(test_data_long_path)
 ```
 
-## handle exclusions
+## Handle exclusions
 
-```{r}
+```{r, warning=FALSE, message=F}
 d <- d %>%
   filter(exclude_participant==0)
 sampling_data <- sampling_data  %>%
@@ -58,7 +58,7 @@ test_array_options_clean <- test_array_options_clean %>%
   filter(levenshtein_distance<2)
 ```
 
-## Summarize Test Data
+## Summarize test data
 
 ```{r}
 ## shorter test representation
