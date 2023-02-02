@@ -1,5 +1,6 @@
 .DS_Store
 .data/v1/raw/
+.data/v2/raw/
 .Rproj.user
 data/v1/raw/catact-v1_PARTICIPANT_SESSION_2023-01-16_11h02.46.10.csv
 data/v1/raw/catact-v1_PARTICIPANT_SESSION_2023-01-16_11h51.25.977.csv
@@ -443,4 +444,17 @@ data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-01-31_02h51.55.376.csv
 data/v2/processed/CatAct V2_January 31, 2023_16.47_processed.csv
 data/v2/processed/cat_v2_cloudresearch_submissions.csv
 analysis/v1/4_exploration.Rmd
-*.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_06h13.52.731.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_08h09.51.214.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_08h16.19.675.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h05.02.845.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h08.06.398.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h09.04.116.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h13.18.353.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h22.45.267.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h24.59.174.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_09h49.18.209.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_10h08.44.374.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_16h04.26.16.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_16h12.44.967.csv
+data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_20h08.27.503.csv
