@@ -118,6 +118,8 @@ exclude_test_location <- test_location_num %>%
 
 exclusions <- unique(c(exclude_open_responses,exclude_fail_name_check,exclude_sampling_location,exclude_test_location))
 
+write_csv(data.frame(subject=exclusions),here(write_path,"catact_v2_exclusions.csv"))
+
 ## add participant-level indicator for exclusions to dataset
 d <- d %>%
   mutate(

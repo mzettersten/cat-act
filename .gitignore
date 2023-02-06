@@ -458,3 +458,5 @@ data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_10h08.44.374.csv
 data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_16h04.26.16.csv
 data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_16h12.44.967.csv
 data/v2/raw/catact-v2_PARTICIPANT_SESSION_2023-02-01_20h08.27.503.csv
+data/v2/processed/catact-v2-universal_exclude_participants.csv
+data/v2/processed/CatAct V2_February 6, 2023_09.42_processed.csv

@@ -7,7 +7,7 @@ source("helper.R")
 
 data_path <- here("..","..","data","v2","processed", "catact-v2-alldata.csv")
 cloud_path <- here("..","..","data","v2","processed","cat_v2_cloudresearch_submissions.csv")
-qualtrics_path <- here("..","..","data","v2","processed","CatAct V2_January 31, 2023_16.47_processed.csv")
+qualtrics_path <- here("..","..","data","v2","processed","CatAct V2_February 6, 2023_09.42_processed.csv")
 
 #### read in data ####
 d <- read_csv(data_path)
@@ -55,3 +55,33 @@ condition_assignment %>%
   summarize(
     total_n=sum(n)
   )
+
+### bonusing
+#### note: first run 2_processing.R to get exclusions
+exclusions <- read_csv(here("..","..","data","v2","processed", "catact_v2_exclusions.csv")) %>%
+  mutate(excluded=1)
+d <- d %>%
+  left_join(exclusions)
+
+
+
+#### remove bot-like mTurk ids
+universal_exclude <- c("p1740",  #bot entries for word_meaning (googled entries)
+                       "p474744", #bot entries for word_meaning (googled entries) 
+                       "p600079", #bot entries for word_meaning (googled entries) 
+                       "p218152", #bot-like entries for word_meaning (appears to use the alternate label)
+                       "p602", #nonsensical entries for word_meaning
+                       "p782790", #nonsensical entries for word_meaning
+                       "p889922" #nonsensical entries for word_meaning
+                       )
+universal_exclude_df <- data.frame(subject=universal_exclude,universal_exclude=1)
+
+mturkids_universal_exclude <- d %>%
+  left_join(universal_exclude_df) %>%
+  filter(universal_exclude==1) %>%
+  distinct(subject,workerId) %>%
+  select(-subject)
+
+write_csv(mturkids_universal_exclude,here("..","..","data","v2","processed","catact-v2-universal_exclude_participants.csv"))
+
+          
