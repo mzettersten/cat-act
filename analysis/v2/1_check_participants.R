@@ -57,13 +57,85 @@ condition_assignment %>%
   )
 
 ### bonusing
+#only run if raw/ deanonymized data is available
 #### note: first run 2_processing.R to get exclusions
-exclusions <- read_csv(here("..","..","data","v2","processed", "catact_v2_exclusions.csv")) %>%
-  mutate(excluded=1)
-d <- d %>%
-  left_join(exclusions)
+workerId_assignment <- d %>%
+  distinct(workerId,subject)
 
+## compute test performance
+test_data_long_path <- here("..","..","data","v2","processed", "catact-v2-test-data-long.csv")
+test_array_options_clean <- read_csv(test_data_long_path)
+test_array_options_clean <- test_array_options_clean %>%
+  filter(exclude_participant==0) %>%
+  filter(levenshtein_distance<2) %>%
+  left_join(workerId_assignment)
+subj_test_accuracy_all <- test_array_options_clean %>%
+  left_join(select(d,workerId,subject,narrow_category_label_level,intermediate_category_label_level,broad_category_label_level)) %>%
+  group_by(workerId,subject,narrow_category_label_level,intermediate_category_label_level,broad_category_label_level,trial_type,current_category_training_level,current_category_label_level,current_category_kind,final_choice_array,total_number_correct_options_label,total_number_correct_options_training) %>%
+  summarize(
+    accuracy_training = mean(is_match_to_training, na.rm=TRUE),
+    accuracy_label = mean(is_match_to_label,na.rm=TRUE),
+    hit_rate_training = mean(hit_training,na.rm=TRUE),
+    hit_rate_label = mean(hit_label,na.rm=TRUE),
+    false_alarm_rate_training = mean(false_alarm_training,na.rm=TRUE),
+    false_alarm_rate_label = mean(false_alarm_label,na.rm=TRUE)
+  ) %>%
+  mutate(
+    hit_rate_training_adj= case_when(
+      hit_rate_training==1 ~ 1 - 1/(2*total_number_correct_options_training),
+      hit_rate_training==0 ~ 1/(2*total_number_correct_options_training),
+      TRUE ~ hit_rate_training
+    ),
+    hit_rate_label_adj= case_when(
+      hit_rate_label==1 ~ 1 - 1/(2*total_number_correct_options_label),
+      hit_rate_label==0 ~ 1/(2*total_number_correct_options_label),
+      TRUE ~ hit_rate_label
+    ),
+    false_alarm_rate_training_adj= case_when(
+      false_alarm_rate_training==0 ~ 1/(2*total_number_correct_options_training),
+      false_alarm_rate_training==1 ~ 1 - 1/(2*total_number_correct_options_training),
+      TRUE ~ false_alarm_rate_training
+    ),
+    false_alarm_rate_label_adj= case_when(
+      false_alarm_rate_label==0 ~ 1/(2*total_number_correct_options_label),
+      false_alarm_rate_label==1 ~ 1 - 1/(2*total_number_correct_options_label),
+      TRUE ~ false_alarm_rate_label
+    )
+  ) %>%
+  mutate(
+    dprime_training=qnorm(hit_rate_training_adj) - qnorm(false_alarm_rate_training_adj),
+    dprime_label=qnorm(hit_rate_label_adj) - qnorm(false_alarm_rate_label_adj),
+    c_training=-.5*(qnorm(hit_rate_training_adj) + qnorm(false_alarm_rate_training_adj)),
+    c_label=-.5*(qnorm(hit_rate_label_adj) + qnorm(false_alarm_rate_label_adj)))
 
+overall_subj_accuracy <- subj_test_accuracy_all %>%
+  ungroup() %>%
+  group_by(workerId,subject,narrow_category_label_level,intermediate_category_label_level,broad_category_label_level) %>%
+  summarize(
+    N=n(),
+    average_dprime_training=mean(dprime_training),
+    average_dprime_label=mean(dprime_label)
+  ) %>%
+  unite(col="assigned_condition_combo",narrow_category_label_level,intermediate_category_label_level,broad_category_label_level,remove=FALSE)
+
+subjects_top <- overall_subj_accuracy  %>% 
+  filter(N==3) %>%
+  group_by(assigned_condition_combo) %>%
+  select(workerId,subject,assigned_condition_combo,average_dprime_label,average_dprime_training) %>%
+  slice_max(average_dprime_label,n = 3) %>%
+  mutate(bonus=1)
+
+overall_subj_accuracy <- overall_subj_accuracy %>%
+  left_join(subjects_top)
+ggplot(filter(overall_subj_accuracy,N==3),aes(average_dprime_label,average_dprime_training,color=as.factor(bonus))) +
+  geom_jitter(width=0.01,height=0.01)#+
+ # facet_wrap(~assigned_condition_combo)
+
+bonus_participants <- subjects_top %>%
+  ungroup() %>%
+  distinct(workerId)
+
+write_csv(bonus_participants,here("..","..","data","v2","processed","catact-v2-bonus_participants.csv"))
 
 #### remove bot-like mTurk ids
 universal_exclude <- c("p1740",  #bot entries for word_meaning (googled entries)
