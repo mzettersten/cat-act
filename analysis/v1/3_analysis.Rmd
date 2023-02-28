@@ -29,6 +29,7 @@ sampling_data_path <- here("..","..","data","v1","processed", "catact-v1-samplin
 test_data_path <- here("..","..","data","v1","processed", "catact-v1-test-data.csv")
 test_data_long_path <- here("..","..","data","v1","processed", "catact-v1-test-data-long.csv")
 figure_path <- here("figures")
+write_path <- here("..","..","data","v1","processed")
 ```
 
 # Data Processing
@@ -57,6 +58,16 @@ test_array_options_clean <- test_array_options_clean %>%
   filter(exclude_participant==0) %>%
   filter(levenshtein_distance<2)
 ```
+
+## Extract category responses
+```{r}
+category_labels <- d %>%
+  filter(!is.na(word_meaning)) %>%
+  distinct(subject,current_category_training_level,current_category_label_level,current_category_kind,word_meaning)
+write_csv(category_labels,here(write_path,"catact-v1-label-responses.csv"))
+  
+```
+
 
 ## Summarize test data
 

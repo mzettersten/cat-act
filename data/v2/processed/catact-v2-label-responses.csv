@@ -1,0 +1,612 @@
+subject,current_category_label_level,current_category_kind,current_category_training_level,word_meaning
+p120584,broad,vehicles,narrow,bus
+p120584,hypernym,animals,broad,animal
+p120584,intermediate,vegetables,intermediate,pepper
+p621290,intermediate,animals,intermediate,dog
+p621290,hypernym,vehicles,broad,vehicle
+p621290,narrow,vegetables,narrow,pepper
+p941433,intermediate,vegetables,intermediate,peppers
+p941433,narrow,animals,narrow,dog
+p941433,broad,vehicles,broad,vehicles
+p303589,broad,animals,intermediate,dog
+p303589,broad,vehicles,broad,vehicle
+p303589,intermediate,vegetables,narrow,green pepper
+p736548,intermediate,vehicles,intermediate,bus
+p736548,hypernym,vegetables,broad,vegetable
+p736548,broad,animals,narrow,dog
+p350934,hypernym,animals,broad,pet
+p350934,narrow,vegetables,narrow,Chilli
+p350934,hypernym,vehicles,intermediate,bus
+p110525,intermediate,animals,intermediate,Dog
+p110525,broad,vehicles,narrow,School bus
+p110525,hypernym,vegetables,broad,Green vegetable
+p786454,hypernym,vegetables,broad,produce
+p786454,broad,vehicles,narrow,bus
+p786454,hypernym,animals,intermediate,dog
+p680,broad,vehicles,narrow,bus
+p680,hypernym,animals,broad,Things that have 4 legs/wheels.
+p680,hypernym,vegetables,intermediate,produce
+p860216,intermediate,animals,intermediate,dog
+p860216,intermediate,vegetables,narrow,green pepper
+p860216,broad,vehicles,broad,bus
+p682659,intermediate,animals,intermediate,dog
+p682659,hypernym,vegetables,broad,vegetable
+p682659,intermediate,vehicles,narrow,bus
+p709283,broad,vehicles,broad,horn
+p709283,broad,animals,intermediate,dog bark
+p709283,narrow,vegetables,narrow,chilli
+p838843,hypernym,animals,broad,kind of animal
+p838843,intermediate,vegetables,narrow,chilly
+p838843,hypernym,vehicles,intermediate,bus
+p887883,broad,animals,intermediate,dog
+p887883,hypernym,vegetables,broad,vegetable
+p887883,broad,vehicles,narrow,bus
+p956418,broad,vehicles,broad,Vehicle
+p956418,intermediate,vegetables,intermediate,Pepper
+p956418,broad,animals,narrow,Dog
+p743634,intermediate,vehicles,narrow,school bus
+p743634,hypernym,vegetables,intermediate,pepper
+p743634,broad,animals,broad,fur animal
+p252266,narrow,vegetables,narrow,pepper
+p252266,intermediate,vehicles,intermediate,bus
+p252266,broad,animals,broad,animal
+p244608,hypernym,vegetables,intermediate,pepper
+p244608,broad,animals,narrow,Dalmatian
+p244608,hypernym,vehicles,broad,automobile
+p293884,narrow,animals,narrow,Dalmatian
+p293884,broad,vegetables,intermediate,pepper
+p293884,broad,vehicles,broad,Vehicle
+p17537,narrow,vehicles,narrow,school bus
+p17537,broad,vegetables,broad,vegetable
+p17537,hypernym,animals,intermediate,animal
+p652849,broad,vegetables,broad,vegetable name
+p652849,hypernym,animals,intermediate,dogs
+p652849,intermediate,vehicles,narrow,Bus
+p864015,broad,vegetables,broad,green vegetable
+p864015,broad,animals,narrow,dalmation
+p864015,broad,vehicles,intermediate,bus
+p101210,hypernym,vegetables,intermediate,chili
+p101210,narrow,animals,narrow,dalmation
+p101210,hypernym,vehicles,broad,vehicle
+p581918,broad,animals,broad,animal
+p581918,intermediate,vehicles,intermediate,bus
+p581918,intermediate,vegetables,narrow,chili
+p6098,broad,vegetables,narrow,pepper
+p6098,intermediate,vehicles,intermediate,bus
+p6098,hypernym,animals,broad,dog
+p660519,broad,animals,intermediate,Dog.
+p660519,broad,vegetables,broad,Vegetable
+p660519,narrow,vehicles,narrow,School bus.
+p797976,broad,animals,narrow,Dalmation dog
+p797976,intermediate,vehicles,intermediate,bus
+p797976,broad,vegetables,broad,vegetable
+p400046,broad,vegetables,broad,vegetable
+p400046,narrow,animals,narrow,dalmatian
+p400046,intermediate,vehicles,intermediate,bus
+p559640,intermediate,vegetables,intermediate,pepper
+p559640,intermediate,vehicles,narrow,bus
+p559640,broad,animals,broad,mammal
+p96741,broad,vehicles,broad,vehicle
+p96741,broad,vegetables,intermediate,vegetable
+p96741,broad,animals,narrow,animal
+p483709,intermediate,animals,intermediate,dog
+p483709,narrow,vegetables,narrow,peppers
+p483709,broad,vehicles,broad,bus
+p231212,hypernym,vegetables,broad,not a clue
+p231212,hypernym,animals,intermediate,dog
+p231212,narrow,vehicles,narrow,bus
+p386869,hypernym,animals,intermediate,living thing
+p386869,broad,vegetables,broad,vegetable
+p386869,narrow,vehicles,narrow,vehicle
+p279110,narrow,vegetables,narrow,pepper
+p279110,broad,vehicles,intermediate,bus
+p279110,broad,animals,broad,animal
+p845083,hypernym,vehicles,broad,vehicle
+p845083,narrow,animals,narrow,dalmatian
+p845083,broad,vegetables,intermediate,vegetable
+p97367,hypernym,vegetables,broad,vegetable
+p97367,hypernym,vehicles,intermediate,bus
+p97367,broad,animals,narrow,dalmation
+p966046,intermediate,vegetables,narrow,kita means green chilli
+p966046,hypernym,animals,broad,beppo means one of the dog variety
+p966046,intermediate,vehicles,intermediate,sibu means school bus
+p592161,broad,vegetables,broad,vegetable
+p592161,broad,animals,intermediate,dog
+p592161,intermediate,vehicles,narrow,schoolbus
+p58277,broad,vehicles,broad,enclosed cab motorized vehicle
+p58277,intermediate,animals,narrow,dalmation breed of dog
+p58277,hypernym,vegetables,intermediate,pepper
+p444179,hypernym,animals,intermediate,animal
+p444179,intermediate,vehicles,narrow,bus
+p444179,hypernym,vegetables,broad,vegetable
+p144698,broad,animals,broad,animal
+p144698,hypernym,vehicles,intermediate,vehicle
+p144698,narrow,vegetables,narrow,pepper
+p580490,broad,animals,narrow,dog
+p580490,hypernym,vegetables,intermediate,pepper
+p580490,broad,vehicles,broad,vehicle
+p367664,broad,animals,narrow,dog
+p367664,intermediate,vegetables,intermediate,pepper
+p367664,broad,vehicles,broad,vehicle
+p33838,narrow,vegetables,narrow,pepper
+p33838,hypernym,animals,intermediate,dog
+p33838,hypernym,vehicles,broad,"dog
+"
+p675096,hypernym,vegetables,broad,vegetable
+p675096,broad,animals,intermediate,animal
+p675096,intermediate,vehicles,narrow,bus
+p643143,broad,vegetables,intermediate,pepper
+p643143,hypernym,animals,broad,"animal
+"
+p643143,intermediate,vehicles,narrow,bus
+p874451,intermediate,animals,intermediate,dog
+p874451,broad,vehicles,broad,vehicle
+p874451,broad,vegetables,narrow,chili pepper
+p830878,broad,animals,narrow,dog
+p830878,broad,vegetables,intermediate,vegetable
+p830878,hypernym,vehicles,broad,vehicle
+p499826,narrow,vehicles,narrow,bus
+p499826,intermediate,animals,intermediate,dog
+p499826,hypernym,vegetables,broad,vegetable
+p646348,narrow,vehicles,narrow,school bus
+p646348,intermediate,vegetables,intermediate,pepper
+p646348,broad,animals,broad,animal
+p579754,intermediate,vegetables,intermediate,pepper
+p579754,narrow,vehicles,narrow,school bus
+p579754,hypernym,animals,broad,animal
+p862122,broad,vehicles,broad,vehicle
+p862122,hypernym,animals,intermediate,animal
+p862122,intermediate,vegetables,narrow,pepper
+p112799,narrow,animals,narrow,Dalmatian
+p112799,broad,vegetables,broad,vegetable
+p112799,hypernym,vehicles,intermediate,vehicle
+p996028,hypernym,vegetables,intermediate,pepper
+p996028,narrow,animals,narrow,dalmatian
+p996028,broad,vehicles,broad,vehicle with 4 wheels
+p556023,broad,animals,broad,"dog, rabbit, or turtle"
+p556023,broad,vegetables,intermediate,vegetable
+p556023,narrow,vehicles,narrow,bus
+p910162,broad,vehicles,intermediate,bus
+p910162,broad,vegetables,narrow,pepper
+p910162,hypernym,animals,broad,pet
+p939168,hypernym,vehicles,broad,vehicle
+p939168,hypernym,animals,intermediate,dog
+p939168,intermediate,vegetables,narrow,pepper
+p735176,broad,vehicles,broad,vehicle
+p735176,broad,vegetables,intermediate,pepper
+p735176,narrow,animals,narrow,dalmatian
+p156566,broad,animals,broad,An animal with four legs
+p156566,broad,vegetables,narrow,A banana shaped pepper
+p156566,intermediate,vehicles,intermediate,a bus
+p464403,hypernym,vehicles,broad,vehicle
+p464403,broad,animals,narrow,dog
+p464403,intermediate,vegetables,intermediate,pepper
+p55214,broad,vehicles,broad,four-wheel vehicle
+p55214,broad,animals,intermediate,dog
+p55214,broad,vegetables,narrow,vegetable
+p604164,broad,vegetables,narrow,pepper
+p604164,hypernym,vehicles,intermediate,vehicle
+p604164,broad,animals,broad,four legged pet
+p73948,intermediate,vehicles,intermediate,"bus
+"
+p73948,broad,vegetables,broad,chilli
+p73948,broad,animals,narrow,"dog
+"
+p399593,hypernym,animals,broad,dark color
+p399593,broad,vegetables,narrow,pepper
+p399593,hypernym,vehicles,intermediate,bus
+p716839,narrow,vegetables,narrow,chili
+p716839,hypernym,vehicles,broad,bus
+p716839,hypernym,animals,intermediate,dog
+p432813,hypernym,vegetables,intermediate,vegetable or plant
+p432813,broad,animals,broad,Animal
+p432813,narrow,vehicles,narrow,bus
+p479101,intermediate,vehicles,intermediate,Bus
+p479101,intermediate,animals,narrow,Dog
+p479101,broad,vegetables,broad,vegetable
+p167979,hypernym,vehicles,intermediate,bus
+p167979,intermediate,animals,narrow,dalmatian
+p167979,hypernym,vegetables,broad,vegetable
+p318772,broad,vegetables,narrow,pepper
+p318772,broad,vehicles,intermediate,bus
+p318772,broad,animals,broad,animal
+p678777,broad,vehicles,intermediate,bus
+p678777,hypernym,animals,broad,four legged animal
+p678777,intermediate,vegetables,narrow,pepper
+p599278,broad,vegetables,narrow,pepper
+p599278,broad,animals,intermediate,dog
+p599278,hypernym,vehicles,broad,vehicle
+p496927,hypernym,vehicles,broad,moving object
+p496927,narrow,animals,narrow,dog
+p496927,intermediate,vegetables,intermediate,pepper
+p846929,hypernym,animals,broad,Animal
+p846929,intermediate,vegetables,intermediate,pepper
+p846929,narrow,vehicles,narrow,Bus
+p530791,broad,vegetables,broad,vegetable
+p530791,intermediate,animals,narrow,dog
+p530791,broad,vehicles,intermediate,vehicle
+p633554,broad,vegetables,intermediate,kita means green chilli
+p633554,broad,vehicles,narrow,beppo means travel bus
+p633554,broad,animals,broad,Animals means is sibu
+p788285,broad,vehicles,narrow,bus
+p788285,hypernym,vegetables,broad,vegetable
+p788285,hypernym,animals,intermediate,mammal
+p1444,hypernym,animals,broad,animal
+p1444,hypernym,vegetables,intermediate,pepper
+p1444,broad,vehicles,narrow,bus
+p90225,broad,vegetables,intermediate,pepper
+p90225,hypernym,animals,broad,animal
+p90225,broad,vehicles,narrow,bus
+p141416,intermediate,vegetables,intermediate,pepper
+p141416,hypernym,vehicles,broad,vehicle
+p141416,intermediate,animals,narrow,dog
+p43803,narrow,animals,narrow,Dog with spots on it.
+p43803,broad,vegetables,intermediate,Pepper
+p43803,hypernym,vehicles,broad,Vehicle
+p301541,broad,animals,broad,An animal.
+p301541,intermediate,vehicles,intermediate,Bus
+p301541,broad,vegetables,narrow,Pepper
+p302991,hypernym,animals,broad,It means moveable object
+p302991,intermediate,vehicles,narrow,vehicle
+p302991,hypernym,vegetables,intermediate,food
+p970395,intermediate,vegetables,intermediate,pepper
+p970395,hypernym,vehicles,broad,transportation
+p970395,broad,animals,narrow,dog
+p842847,broad,animals,broad,Four-legged animal
+p842847,narrow,vegetables,narrow,green chili pepper
+p842847,intermediate,vehicles,intermediate,bus
+p605577,intermediate,vegetables,narrow,pepper
+p605577,broad,animals,broad,animal
+p605577,broad,vehicles,intermediate,vehicle
+p748957,hypernym,vegetables,broad,vegetable
+p748957,intermediate,vehicles,narrow,bus
+p748957,broad,animals,intermediate,animal
+p876058,broad,animals,narrow,spotted dog
+p876058,hypernym,vehicles,intermediate,Bus
+p876058,hypernym,vegetables,broad,Vegetable
+p765174,hypernym,vehicles,intermediate,bus
+p765174,broad,vegetables,broad,veggie
+p765174,narrow,animals,narrow,spotted dog
+p534551,intermediate,animals,narrow,dog
+p534551,intermediate,vegetables,intermediate,pepper
+p534551,broad,vehicles,broad,vehicle
+p770313,broad,animals,intermediate,dog
+p770313,hypernym,vehicles,broad,vehicle
+p770313,narrow,vegetables,narrow,pepper
+p681703,broad,animals,narrow,dog
+p681703,hypernym,vehicles,intermediate,vehicle
+p681703,broad,vegetables,broad,vegetable
+p15336,intermediate,vehicles,intermediate,Bus
+p15336,intermediate,animals,narrow,Dalmation
+p15336,hypernym,vegetables,broad,green vegetable
+p673810,broad,vehicles,broad,four-wheeled vehicle
+p673810,hypernym,vegetables,intermediate,pepper
+p673810,intermediate,animals,narrow,Dalmatian (dog)
+p555957,broad,vegetables,narrow,a green pepper
+p555957,hypernym,animals,intermediate,dog
+p555957,hypernym,vehicles,broad,transportation
+p271126,intermediate,animals,intermediate,Dog
+p271126,hypernym,vehicles,broad,Vehicle
+p271126,intermediate,vegetables,narrow,Pepper
+p708584,intermediate,vehicles,intermediate,bus
+p708584,hypernym,vegetables,broad,vegetable
+p708584,intermediate,animals,narrow,dog
+p91592,broad,vegetables,intermediate,pepper
+p91592,narrow,vehicles,narrow,school bus
+p91592,hypernym,animals,broad,animal
+p350666,hypernym,vegetables,intermediate,pepper
+p350666,intermediate,animals,narrow,spots
+p350666,hypernym,vehicles,broad,vehicle
+p298644,broad,vegetables,intermediate,pepper
+p298644,hypernym,animals,broad,animal
+p298644,intermediate,vehicles,narrow,bus
+p686953,broad,vehicles,intermediate,bus
+p686953,broad,animals,broad,animal
+p686953,intermediate,vegetables,narrow,pepper
+p634007,narrow,vegetables,narrow,Pepper that is green
+p634007,broad,vehicles,broad,vehicle
+p634007,hypernym,animals,intermediate,dog
+p62679,broad,animals,intermediate,Dog
+p62679,narrow,vegetables,narrow,Green pepper
+p62679,hypernym,vehicles,broad,Vehicle
+p765271,broad,animals,intermediate,dog
+p765271,broad,vegetables,narrow,pepper
+p765271,hypernym,vehicles,broad,automobile
+p973434,narrow,vegetables,narrow,jalapeno
+p973434,hypernym,animals,broad,animal
+p973434,broad,vehicles,intermediate,vehicle
+p462428,broad,vegetables,broad,vegatble
+p462428,hypernym,vehicles,intermediate,bus
+p462428,broad,animals,narrow,dalmation
+p225917,broad,vegetables,broad,Green Vegetable
+p225917,narrow,vehicles,narrow,bus
+p225917,intermediate,animals,intermediate,Dog
+p877133,intermediate,vehicles,narrow,bus
+p877133,broad,vegetables,intermediate,vegetable
+p877133,broad,animals,broad,animal
+p895284,intermediate,vehicles,intermediate,bus
+p895284,broad,vegetables,broad,vegetable
+p895284,narrow,animals,narrow,dalmation
+p798696,narrow,vehicles,narrow,school bus
+p798696,hypernym,animals,broad,animal
+p798696,hypernym,vegetables,intermediate,vegetable
+p287261,broad,vegetables,broad,Above ground vegetable
+p287261,broad,animals,intermediate,dog
+p287261,broad,vehicles,narrow,school bus
+p55665,narrow,vehicles,narrow,bus
+p55665,intermediate,animals,intermediate,dog
+p55665,broad,vegetables,broad,vegetable
+p118560,intermediate,vegetables,intermediate,pepper
+p118560,broad,animals,broad,animal
+p118560,broad,vehicles,narrow,bus
+p416673,broad,vehicles,intermediate,bus
+p416673,hypernym,vegetables,broad,vegetable
+p416673,narrow,animals,narrow,dalmatian
+p795388,intermediate,vehicles,narrow,bus
+p795388,hypernym,animals,broad,animal
+p795388,hypernym,vegetables,intermediate,produce
+p200804,hypernym,vehicles,broad,vehicle
+p200804,broad,vegetables,narrow,green pepper
+p200804,intermediate,animals,intermediate,dog
+p527634,intermediate,animals,narrow,dog
+p527634,broad,vehicles,broad,vehicle
+p527634,broad,vegetables,intermediate,vegetable
+p285841,narrow,animals,narrow,Dog
+p285841,broad,vehicles,intermediate,Bus
+p285841,broad,vegetables,broad,fruits
+p535414,broad,vegetables,narrow,a jalapeno
+p535414,hypernym,animals,broad,animal
+p535414,intermediate,vehicles,intermediate,bus
+p979588,intermediate,vehicles,narrow,schoolbus
+p979588,broad,vegetables,broad,vegetable
+p979588,hypernym,animals,intermediate,dog
+p815089,intermediate,vegetables,narrow,Pepper
+p815089,broad,animals,broad,animal
+p815089,hypernym,vehicles,intermediate,bus
+p651366,broad,vegetables,broad,vegetable
+p651366,intermediate,animals,intermediate,dog
+p651366,intermediate,vehicles,narrow,school bus
+p83469,broad,animals,narrow,animal
+p83469,broad,vegetables,broad,vegetable
+p83469,broad,vehicles,intermediate,vehicle
+p96874,intermediate,animals,narrow,dog
+p96874,hypernym,vehicles,broad,vehicle
+p96874,intermediate,vegetables,intermediate,pepper
+p171084,broad,vehicles,broad,Vehicles
+p171084,intermediate,animals,intermediate,Dog
+p171084,narrow,vegetables,narrow,Pepper
+p455268,broad,vehicles,broad,something on wheels
+p455268,intermediate,animals,narrow,dog
+p455268,intermediate,vegetables,intermediate,pepper
+p249893,narrow,animals,narrow,Nice name of the dog
+p249893,hypernym,vegetables,broad,it is a vegitable
+p249893,broad,vehicles,intermediate,bus
+p768479,narrow,vehicles,narrow,bus
+p768479,hypernym,vegetables,broad,vegetable
+p768479,broad,animals,intermediate,living thing
+p341061,hypernym,vegetables,intermediate,pepper
+p341061,narrow,vehicles,narrow,bus
+p341061,broad,animals,broad,animal
+p516668,hypernym,vehicles,intermediate,vehicle
+p516668,narrow,vegetables,narrow,chilli
+p516668,broad,animals,broad,pets
+p744798,intermediate,vegetables,narrow,pepper
+p744798,hypernym,vehicles,broad,vehicle
+p744798,hypernym,animals,intermediate,dog
+p391282,broad,vegetables,broad,vegatable
+p391282,broad,vehicles,narrow,bus
+p391282,hypernym,animals,intermediate,big
+p373631,hypernym,vegetables,intermediate,pepper
+p373631,hypernym,vehicles,broad,a machine with wheels
+p373631,intermediate,animals,narrow,dog
+p138450,narrow,animals,narrow,dog
+p138450,hypernym,vegetables,intermediate,chilli
+p138450,hypernym,vehicles,broad,bus
+p600409,broad,vegetables,broad,vegetable
+p600409,broad,animals,intermediate,dog
+p600409,narrow,vehicles,narrow,school bus
+p802986,broad,vegetables,narrow,Pepper
+p802986,intermediate,animals,intermediate,dog
+p802986,broad,vehicles,broad,vehicle
+p41909,hypernym,vegetables,broad,vegetable
+p41909,intermediate,animals,narrow,dog
+p41909,broad,vehicles,intermediate,bus
+p46388,broad,vegetables,broad,vegetables
+p46388,hypernym,vehicles,intermediate,Bus
+p46388,intermediate,animals,narrow,Dog
+p180698,intermediate,vegetables,intermediate,pepper
+p180698,hypernym,animals,broad,animal
+p180698,broad,vehicles,narrow,bus
+p730635,hypernym,animals,intermediate,Sibu is used to refer animals that can be used for transport like dogs and horses
+p730635,broad,vehicles,broad,I think it means locomotives.
+p730635,intermediate,vegetables,narrow,kita most probably refers to pepper.
+p949214,broad,animals,broad,animal
+p949214,intermediate,vegetables,intermediate,pepper
+p949214,narrow,vehicles,narrow,school bus
+p778684,hypernym,vegetables,intermediate,pepper
+p778684,narrow,vehicles,narrow,school bus
+p778684,hypernym,animals,broad,animal
+p869379,intermediate,animals,intermediate,dog
+p869379,intermediate,vehicles,narrow,bus
+p869379,hypernym,vegetables,broad,vegetable
+p262183,intermediate,vehicles,narrow,bus
+p262183,broad,vegetables,intermediate,chilli
+p262183,broad,animals,broad,rabbit
+p361860,intermediate,vehicles,narrow,bus
+p361860,hypernym,animals,intermediate,animal
+p361860,hypernym,vegetables,broad,vegetable
+p216496,broad,animals,narrow,dog
+p216496,hypernym,vegetables,broad,vegetable
+p216496,intermediate,vehicles,intermediate,bus
+p215913,hypernym,vehicles,intermediate,bus
+p215913,broad,vegetables,narrow,pepper
+p215913,broad,animals,broad,animal
+p373171,intermediate,vegetables,intermediate,pepper
+p373171,broad,animals,broad,animal
+p373171,broad,vehicles,narrow,bus
+p626566,narrow,animals,narrow,dog
+p626566,broad,vegetables,broad,tibble
+p626566,broad,vehicles,intermediate,bus
+p680615,intermediate,animals,intermediate,"Dog
+"
+p680615,broad,vegetables,broad,"Green veggie
+"
+p680615,broad,vehicles,narrow,"Large truck
+"
+p159412,intermediate,animals,narrow,dog
+p159412,intermediate,vehicles,intermediate,bus
+p159412,broad,vegetables,broad,vegetable
+p498346,intermediate,vegetables,narrow,pepper
+p498346,hypernym,vehicles,broad,vehicle
+p498346,broad,animals,intermediate,dog
+p585896,hypernym,animals,broad,animals
+p585896,narrow,vegetables,narrow,green chilly
+p585896,intermediate,vehicles,intermediate,bus
+p938665,intermediate,vehicles,narrow,schoolbus
+p938665,hypernym,animals,broad,animal
+p938665,intermediate,vegetables,intermediate,pepper
+p838973,broad,vegetables,intermediate,pepper
+p838973,narrow,vehicles,narrow,school bus
+p838973,hypernym,animals,broad,animal
+p631926,broad,animals,broad,four-legged animal
+p631926,broad,vegetables,narrow,Some type of jalapeno
+p631926,broad,vehicles,intermediate,Mass transportation machines.
+p161704,broad,vehicles,intermediate,vehicle with 4 wheels
+p161704,broad,animals,broad,animal
+p161704,narrow,vegetables,narrow,green pepper
+p298094,hypernym,vehicles,intermediate,bus
+p298094,broad,vegetables,narrow,pepper
+p298094,hypernym,animals,broad,pet
+p982143,intermediate,animals,narrow,dog
+p982143,broad,vegetables,intermediate,vegetable
+p982143,hypernym,vehicles,broad,vehicle
+p232943,intermediate,vehicles,intermediate,bus
+p232943,narrow,animals,narrow,dalmatian
+p232943,hypernym,vegetables,broad,vegetable
+p906882,broad,vehicles,broad,A vehicle or transportation
+p906882,hypernym,vegetables,intermediate,Pepper
+p906882,narrow,animals,narrow,dalmatian
+p9547,hypernym,vegetables,intermediate,pepper
+p9547,broad,animals,broad,animal
+p9547,broad,vehicles,narrow,bus
+p563199,broad,vegetables,broad,Green vegetable
+p563199,hypernym,animals,intermediate,dog
+p563199,broad,vehicles,narrow,vehicle
+p56107,intermediate,vegetables,narrow,Pepper
+p56107,hypernym,vehicles,intermediate,Bus
+p56107,broad,animals,broad,Pet
+p802929,hypernym,vehicles,broad,vehicle
+p802929,narrow,vegetables,narrow,"pepper
+"
+p802929,intermediate,animals,intermediate,dog
+p609362,intermediate,animals,narrow,dog
+p609362,hypernym,vehicles,intermediate,bus or pepper
+p609362,broad,vegetables,broad,vegetable
+p934992,intermediate,vehicles,intermediate,bus
+p934992,hypernym,animals,broad,animal
+p934992,intermediate,vegetables,narrow,chili
+p443633,hypernym,animals,broad,animal
+p443633,broad,vehicles,intermediate,vehicle
+p443633,broad,vegetables,narrow,vegatable
+p572701,hypernym,animals,intermediate,dog
+p572701,hypernym,vegetables,broad,vegetable
+p572701,narrow,vehicles,narrow,schoolbus
+p221482,hypernym,vegetables,broad,vegetable
+p221482,broad,vehicles,intermediate,bus
+p221482,intermediate,animals,narrow,dog
+p3402,intermediate,animals,intermediate,dog
+p3402,hypernym,vegetables,broad,vegetable or vehicle
+p3402,narrow,vehicles,narrow,vehicle
+p87194,broad,animals,intermediate,dog
+p87194,broad,vehicles,narrow,"Bus
+"
+p87194,broad,vegetables,broad,Vegetables
+p42294,narrow,vegetables,narrow,pepper
+p42294,broad,vehicles,broad,vehicle
+p42294,broad,animals,intermediate,dog
+p44279,hypernym,vehicles,broad,passenger vehicle
+p44279,broad,vegetables,narrow,green pepper
+p44279,intermediate,animals,intermediate,dog
+p869780,broad,vegetables,broad,vegetable
+p869780,intermediate,vehicles,narrow,school bus
+p869780,broad,animals,intermediate,animal
+p897932,intermediate,vegetables,narrow,pepper
+p897932,hypernym,vehicles,intermediate,vehicle
+p897932,hypernym,animals,broad,animal
+p248204,broad,animals,narrow,type of dog
+p248204,hypernym,vehicles,broad,vehicle
+p248204,hypernym,vegetables,intermediate,pepper
+p531668,narrow,vehicles,narrow,school bus
+p531668,broad,vegetables,intermediate,peppers
+p531668,broad,animals,broad,small animals
+p964318,broad,vehicles,narrow,Bus
+p964318,broad,animals,intermediate,Dog
+p964318,hypernym,vegetables,broad,Vegetable
+p741402,intermediate,animals,intermediate,dog
+p741402,hypernym,vegetables,broad,vegetables
+p741402,broad,vehicles,narrow,school bus
+p708177,intermediate,vegetables,narrow,pepper
+p708177,hypernym,animals,broad,4 legged animal
+p708177,broad,vehicles,intermediate,bus
+p439692,broad,animals,intermediate,dog
+p439692,broad,vehicles,broad,vehicle
+p439692,intermediate,vegetables,narrow,pepper
+p641124,hypernym,vehicles,broad,vehicle
+p641124,broad,animals,narrow,animal
+p641124,broad,vegetables,intermediate,pepper
+p772968,broad,vegetables,broad,vegetable
+p772968,intermediate,vehicles,narrow,bus
+p772968,intermediate,animals,intermediate,dog
+p871779,hypernym,vehicles,intermediate,"train
+"
+p871779,narrow,animals,narrow,"dalmation 
+"
+p871779,hypernym,vegetables,broad,veggie
+p991847,intermediate,vegetables,intermediate,vegetable
+p991847,narrow,animals,narrow,Dalmatian
+p991847,hypernym,vehicles,broad,Vehicle
+p679827,broad,vehicles,narrow,yellow school bus
+p679827,broad,vegetables,intermediate,chili pepper
+p679827,broad,animals,broad,four legged small animal
+p965891,narrow,animals,narrow,A name of an animal
+p965891,hypernym,vegetables,broad,A type of plant
+p965891,hypernym,vehicles,intermediate,A bus
+p207057,hypernym,vegetables,broad,vegetables
+p207057,intermediate,animals,narrow,dog
+p207057,hypernym,vehicles,intermediate,bus
+p708412,broad,animals,intermediate,Dogs
+p708412,intermediate,vegetables,narrow,green chilly
+p708412,hypernym,vehicles,broad,bus
+p291406,broad,animals,broad,animal
+p291406,intermediate,vegetables,narrow,peppers
+p291406,intermediate,vehicles,intermediate,busses
+p793775,broad,vegetables,narrow,Long and curved vegetable
+p793775,broad,vehicles,intermediate,bus
+p793775,hypernym,animals,broad,animal
+p144985,hypernym,vehicles,intermediate,bus
+p144985,broad,animals,narrow,mammal
+p144985,broad,vegetables,broad,vegetable
+p153940,broad,vehicles,broad,vehicle
+p153940,intermediate,animals,intermediate,dog
+p153940,intermediate,vegetables,narrow,pepper
+p158352,broad,vegetables,intermediate,Chili
+p158352,hypernym,vehicles,broad,Vehicle
+p158352,narrow,animals,narrow,dog
+p527327,hypernym,animals,broad,animal
+p527327,broad,vegetables,intermediate,pepper
+p527327,broad,vehicles,narrow,bus
+p238583,hypernym,vegetables,broad,vegetable
+p238583,intermediate,animals,intermediate,dog
+p238583,intermediate,vehicles,narrow,bus
+p34151,hypernym,vehicles,broad,vehicle and dog
+p34151,narrow,animals,narrow,white dog
+p34151,intermediate,vegetables,intermediate,chili
+p776550,broad,vegetables,intermediate,pepper
+p776550,broad,animals,narrow,dalmation
+p776550,broad,vehicles,broad,vehicle
+p500601,hypernym,vegetables,intermediate,vegetable
+p500601,broad,vehicles,narrow,vehicle
+p500601,broad,animals,broad,animal
+p729974,intermediate,vehicles,narrow,school bus
+p729974,broad,vegetables,intermediate,pepper
+p729974,broad,animals,broad,animal
