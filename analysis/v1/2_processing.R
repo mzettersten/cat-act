@@ -27,6 +27,12 @@ survey_responses <- d %>%
   fill(word_meaning,.direction = "up") %>%
   distinct()
 
+#write the strategy data frame
+strategy_responses_only <- survey_responses %>%
+  select(subject,strategy,choice_strategy,comments) %>%
+  distinct()
+write_csv(strategy_responses_only,here(write_path,"catact-v1-strategy-responses.csv"))
+
 d <- d %>%
   left_join(survey_responses)
 

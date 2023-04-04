@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <script src="jspsych-6.3.1/jspsych.js"></script> 
+       <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-survey-multi-select.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-survey-multi-choice.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-survey-html-form.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-instructions.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-html-button-response.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-fullscreen.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-preload.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-html-button-response-cols.js"></script><script src="jspsych-6.3.1/plugins/jspsych-html-button-response-catact.js"></script>
+       <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+       <link rel="stylesheet" href="jspsych-6.3.1/css/jspsych.css">
+       <link rel="stylesheet" href="jspsych-6.3.1/css/catAct.css">
+
+<!--   <script type="text/javascript" src="lib/vendors/jquery-2.2.0.min.js"></script>
+  <script type="text/javascript" src="lib/jspsych-pavlovia-3.2.5.js"></script> -->
+
+       <script src="js/helper.js"></script>
+       <script src="js/settings.js"></script>
+       <script src="js/generate_trials.js"></script>
+       <script src="js/generate_blocks.js"></script>
+    </head>
+    <body>
+    </body>
+        
+    <script>
+        // ORGANIZE SUBJECT ID & GENERAL PARAMETERS
+        // generate a random subject ID (just to be safe)
+        var subject_id = Math.floor(Math.random()*1000000);
+        subject_id="p"+subject_id.toString();
+        //console.log(subject_id);
+
+        // get participant-specific url parameters from mTurk study link
+        var workerId = getParamFromURL('workerId');
+        var assignmentId = getParamFromURL('assignmentId');
+        var hitId = getParamFromURL('hitId');
+
+        //make sure that nobody can enter anything damaging
+        workerId.replace(/[^A-Za-z0-9_]/g, "");
+        hitId.replace(/[^A-Za-z0-9_]/g, "");
+        assignmentId.replace(/[^A-Za-z0-9_]/g, "");
+
+        //set up category conditions
+        var n_cat_level = getParamFromURL('n_cat_level');
+        var i_cat_level = getParamFromURL('i_cat_level');
+        var b_cat_level = getParamFromURL('b_cat_level');
+
+        var catk_n = getParamFromURL('catk_n');
+        var catk_i = getParamFromURL('catk_i');
+        var catk_b = getParamFromURL('catk_b');
+
+        //make sure that nobody can enter anything damaging
+        n_cat_level.replace(/[^A-Za-z0-9_]/g, "");
+        i_cat_level.replace(/[^A-Za-z0-9_]/g, "");
+        b_cat_level.replace(/[^A-Za-z0-9_]/g, "");
+        catk_n.replace(/[^A-Za-z0-9_]/g, "");
+        catk_i.replace(/[^A-Za-z0-9_]/g, "");
+        catk_b.replace(/[^A-Za-z0-9_]/g, "");
+
+        var correct_category_label_levels = create_correct_category_labels(n_cat_level,i_cat_level,b_cat_level);
+        console.log(correct_category_label_levels);
+
+        var category_kinds =["animals","vegetables","vehicles"];
+        var randomized_category_kinds = create_category_kinds(category_kinds,catk_n,catk_i,catk_b);
+        console.log(randomized_category_kinds);
+        
+        //create random code for final message
+        var code = createCode("CatAct");
+
+        jsPsych.data.addProperties({
+          code: code,
+          subject: subject_id,
+          workerId: workerId,
+          hitId: hitId,
+          assignmentId: assignmentId,
+          n_cat_level: n_cat_level,
+          narrow_category_label_level: correct_category_label_levels["narrow"],
+          i_cat_level: i_cat_level,
+          intermediate_category_label_level: correct_category_label_levels["intermediate"],
+          b_cat_level: b_cat_level,
+          broad_category_label_level: correct_category_label_levels["broad"],
+          catk_n: catk_n,
+          narrow_category_kind: randomized_category_kinds["narrow"],
+          catk_i: catk_i,
+          intermediate_category_kind: randomized_category_kinds["intermediate"],
+          catk_b: catk_b,
+          broad_category_kind: randomized_category_kinds["broad"],
+        });
+
+        //create image array for preloading
+        var all_grid_images = grid_image_names.concat(sampling_image_names);
+        var all_images = all_grid_images.concat(training_image_names);
+        console.log(all_images);
+
+        // create timeline
+        var timeline = [];
+
+        // /* init connection with pavlovia.org */
+        // var pavlovia_init = {
+        //   type: "pavlovia",
+        //   command: "init"
+        // };
+
+        // timeline.push(pavlovia_init);
+
+        var preload = {
+          type: 'preload',
+          auto_preload: true,
+          images: all_images,
+          message: "Please wait while the experiment loads.",
+          continue_after_error: true,
+          max_load_time: 15000
+        }
+        timeline.push(preload);
+
+
+        var enter_fullscreen = {
+          type: 'fullscreen',
+          fullscreen_mode: true
+        }
+
+        timeline.push(enter_fullscreen);
+
+		// create instructions and push to timeline
+		var instructions_page_stimulus = '<div id="container"><p><b><font size="4.5">Welcome to the experiment!</font></b></p><p><font size="4.5">In this experiment, we are interested in how people learn the meanings of new words.</font></p><p>Imagine you are learning a brand new language. Someone tells you a new word for the first time. Can you figure out what the word means? In this experiment, you will be shown objects together with their names in a made-up language. Your job is to learn these new words. </p><p><font size="4.5">Here'+"'"+'s how the experiment will work. First, you will see a new word and three examples of the word. Next, we will check your memory for this new word. Then, you will see objects which may or may not also match the new word. You will get a chance to choose one of these objects and learn its name. Finally, you will select all of the objects that you think match the new word. <b>Remember, your job is to figure out what the new word means and which objects match the new word.</b></p><p><font size="4.5">This process will repeat, with a brand new word. You will learn three words total following these steps. Do your best to figure out what each word means. <b>The top 50 participants (out of 200) who do the best at identifying the meanings of new words will receive a $0.20 bonus in addition to the base compensation for the task.</b></p></font></p><p><i><font size="4.5">Click Next to begin the experiment and learn the first word!</font></i></p></div>';
+		// display instructions page
+		var instructions = {
+			type: 'html-button-response',
+			stimulus: instructions_page_stimulus,
+      choices: ["Next"],
+		}
+		timeline.push(instructions);
+
+
+    // BUILD TRIALS
+    // key parameters
+    var category_levels = ["narrow","intermediate","broad"];
+    var training_labels = ["sibu","kita","beppo"];
+    var alternate_training_labels = ["tibble", "roozer", "guffy"];
+    
+
+    var training_types = get_training_types(randomized_category_kinds,training_labels,alternate_training_labels,correct_category_label_levels);
+		var trial_order = get_trial_order(category_levels);
+
+		console.log(training_types)
+		console.log(trial_order)
+
+    var all_blocks = generate_all_blocks(trial_order,training_types);
+
+    timeline = timeline.concat(all_blocks);
+
+    console.log(timeline)
+
+	 // create end of experiment instruction and lead-in to demographics.
+	 var end_page_stimulus = '<div id="container"><p><font size="4.5">Thank you for completing the experiment! </font></p><p><font size="4.5">Now we have a few brief questions. Click next to begin.</p></font></div>';
+		// display conclusion page
+		var end_page = {
+			type: 'instructions',
+			pages: [end_page_stimulus],
+      show_clickable_nav: true
+		}
+		timeline.push(end_page); 
+
+    // add demographics and debrief questions
+    var demographics = create_demographics();
+    timeline = timeline.concat(demographics);
+    var debrief = create_debrief_questions();
+    timeline = timeline.concat(debrief);
+
+    // /* finish connection with pavlovia.org */
+    // var pavlovia_finish = {
+    //   type: "pavlovia",
+    //   command: "finish"
+    // };
+    // timeline.push(pavlovia_finish);
+
+    console.log(timeline)
+
+    // CREATE FINAL EXPERIMENT MESSAGE/ DEBRIEF AFTER DATA SUCCESSFULLY STORED
+    // including a random code participants can use to confirm they took the study (for payment on Amazon Mechanical Turk)
+
+    //debrief and code message
+    var experimentFinal = [];
+    var final_instructions = {
+      type: 'instructions',
+      size: 400,
+      pages: [
+      'Thanks for participating! In this experiment, we are interested in how people gather information to help them learn new words. Please let us know if you have any questions!'
+        +"<br>" + "<br>"
+        +'<center>Your completion code/ secret key for <u>mTurk</u> is</center>'
+        +"<br>"
+        +'<center><u><b style="font-size:20px">'+ code +'</b></u></center>'
+        +"<br>"
+        +'<center>Please copy/paste this code into the mTurk box.</center>'
+        +"<br>"
+        +'<center>Once you have copied and entered your completion code, you may safely close this window.</center>'
+        ],
+      show_clickable_nav: false
+    };
+
+    //add instructions trial to experiment
+    experimentFinal.push(final_instructions);
+
+   
+   // initiate timeline, display data on finish
+    jsPsych.init({
+       timeline: timeline,
+       show_progress_bar: true,
+       on_finish: function() {
+        //jsPsych.data.displayData();
+        //jsPsych.data.get().localSave('csv','catAct_test.csv');
+        jsPsych.init({
+          timeline: experimentFinal
+        });
+      }
+    });
+
+    </script>
+</html>
