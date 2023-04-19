@@ -218,7 +218,15 @@ d <- d %>%
 
 sampling_data <- d %>%
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,exclude_participant,current_training_images,current_training_label,name_check,shuffled_sampling_images,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info)
+  select(subject,exclude_participant,trial_index,current_training_images,current_training_label,name_check,shuffled_sampling_images,current_category_label_level, current_category_kind,current_category_training_level,sampled_image, sampled_label,sampled_imagename,sampled_imagelabel,sampled_category_kind_short,sampled_category_kind,sampled_category_level,within_category_sample,within_category_sample_f,sampled_category_level_kind_info) %>%
+  mutate(
+    trial_number = case_when(
+      trial_index==8 ~ 1,
+      trial_index==15 ~ 2,
+      trial_index==22 ~ 3,
+      TRUE ~ NA
+    )
+  )
 
 #categorizing choice types
 sampling_data <- sampling_data %>%
@@ -309,9 +317,17 @@ sampling_data_long <- sampling_data_long %>%
 #### test data ####
 test_array <- d %>% 
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,exclude_participant,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,final_choice_array) %>%
+  select(subject,exclude_participant,trial_index,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,final_choice_array) %>%
   mutate(choices = map(final_choice_array, ~ convert_array(.,column_name="test_choice"))) %>%
-  unnest(choices) 
+  unnest(choices) %>%
+  mutate(
+    trial_number = case_when(
+      trial_index==8 ~ 1,
+      trial_index==15 ~ 2,
+      trial_index==22 ~ 3,
+      TRUE ~ NA
+    )
+  )
 
 test_array_clean <- test_array %>%
   mutate(
@@ -373,9 +389,17 @@ write_csv(test_array_clean,here(write_path,"catact-v1-test-data.csv"))
 #### test data - representing all images in long format ####
 test_array_options <- d %>% 
   filter(trial_type == "html-button-response-catact") %>%
-  select(subject,exclude_participant,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,shuffled_test_images,final_choice_array) %>%
+  select(subject,exclude_participant,trial_index,trial_type,current_category_training_level,current_category_label_level,current_category_kind,hypernym_category,shuffled_test_images,final_choice_array) %>%
   mutate(test_options = map(shuffled_test_images, ~ convert_array(.,column_name="test_image"))) %>%
-  unnest(test_options) 
+  unnest(test_options) %>%
+  mutate(
+    trial_number = case_when(
+      trial_index==8 ~ 1,
+      trial_index==15 ~ 2,
+      trial_index==22 ~ 3,
+      TRUE ~ NA
+    )
+  )
 
 test_array_options <- test_array_options %>%
   rowwise() %>%
@@ -387,6 +411,7 @@ test_array_options <- test_array_options %>%
   )
 
 test_array_options_clean <- test_array_options %>%
+  ungroup() %>%
   mutate(
     test_image_type = case_when(
       str_detect(test_image,"sup") ~ "superordinate",

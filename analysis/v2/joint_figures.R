@@ -87,7 +87,29 @@ ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_catego
   theme(axis.title = element_text(face="bold", size=36),
         axis.text.x  = element_text(angle=90, hjust=1,vjust=0.4))
 ggsave(here(figure_path,"sampling_choices_exps1_2.pdf"),width=12,height=16)
+ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
+  geom_bar(position="fill")+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  xlab("Training Condition")+
+  ylab("Proportion of Sampling Choices")+
+  facet_wrap(~version_name)+
+  theme_cowplot(font_size=24)+
+  theme(axis.title = element_text(face="bold", size=20),
+        axis.text.x  = element_text(angle=90, hjust=1,vjust=0.4))
+ggsave(here(figure_path,"sampling_choices_exps1_2_wide.pdf"),width=12,height=9)
 
+
+## Training Trial Order
+ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
+  geom_bar(position="fill")+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  xlab("Training Condition")+
+  ylab("Proportion of Sampling Choices")+
+  facet_wrap(~version_name+trial_number)+
+  theme_cowplot(font_size=16)+
+  theme(axis.title = element_text(face="bold", size=18),
+        axis.text.x  = element_text(angle=90, hjust=1,vjust=0.4))
+ggsave(here(figure_path,"sampling_choices_exps1_2_by_trial.pdf"),width=12,height=9)
 
 ## Test Plot
 

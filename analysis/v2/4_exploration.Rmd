@@ -221,6 +221,8 @@ ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_cat
            axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
   theme(legend.position="none")+
   ylab("Number of Choices")
+
+ggsave(here(figure_path,"sampling_by_category.pdf"))
 ```
 
 ## Test
@@ -613,7 +615,8 @@ subj_test_accuracy_all <- subj_test_accuracy_all %>%
 ggplot(subj_test_accuracy_all,aes(mean_consistent,dprime_label))+
   geom_point()+
   geom_smooth(method="lm",se=FALSE,aes(color=current_category_training_level))+
-  geom_smooth(method="lm")
+  geom_smooth(method="lm")+
+  facet_wrap(~version)
 
 m <- lmer(dprime_label~ mean_consistent+(1+mean_consistent|subject),data=subj_test_accuracy_all)
 summary(m)
@@ -625,7 +628,8 @@ Anova(m,type="II")
 ggplot(subj_test_accuracy_all,aes(mean_narrowly_constraining,dprime_label))+
   geom_point()+
   geom_smooth(method="lm",se=FALSE,aes(color=current_category_training_level))+
-  geom_smooth(method="lm")
+  geom_smooth(method="lm")+
+  facet_wrap(~version)
 
 m <- lmer(dprime_label~ mean_narrowly_constraining+(1+mean_narrowly_constraining|subject),data=subj_test_accuracy_all)
 summary(m)
