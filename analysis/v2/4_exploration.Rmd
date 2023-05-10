@@ -223,6 +223,23 @@ ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_cat
   ylab("Number of Choices")
 
 ggsave(here(figure_path,"sampling_by_category.pdf"))
+
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,color=within_category_sample_f,fill=within_category_sample_f))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(type="qual",palette="Set1")+
+  scale_color_brewer(type="qual",palette="Set1")+
+  facet_wrap(~current_category_training_level_ord+trial_number)+
+  scale_x_discrete(
+    name = "Sampled Category Level",
+    labels = c("subordinate","basic","superordinate","other category")
+  )+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+           axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+
+ggsave(here(figure_path,"sampling_by_trial_number.pdf"))
 ```
 
 ## Test

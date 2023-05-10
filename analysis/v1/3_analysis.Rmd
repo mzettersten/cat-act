@@ -1,7 +1,7 @@
 ---
 title: "CatAct V1"
 author: "Removed"
-date: "2023-01-17"
+date: "2023-05-10"
 output: html_document
 ---
 
@@ -305,6 +305,28 @@ summary(m)
 Anova(m,type="III")
 ```
 
+#### Trial number
+
+Exploratory analysis looking at the effect of trial number and its interaction with training condition.
+
+```{r}
+#effect of trial number
+sampling_data <- sampling_data %>%
+  mutate(trial_number_c = trial_number-2)
+#singular fit with a random slope for trial number
+m <- glmer(sampling_choice_consistent_b~offset(logit(chance_consistent))+trial_number_c+(1|subject), data=sampling_data, family=binomial,glmerControl(optimizer="bobyqa"))
+summary(m)
+
+#interaction between trial number and training condition
+m <- glmer(sampling_choice_consistent_b~offset(logit(chance_consistent))+current_category_training_level*trial_number_c+(1|subject), data=sampling_data, family=binomial,glmerControl(optimizer="bobyqa"))
+summary(m)
+Anova(m,type="III")
+
+#quick peek to understand the interaction
+ggplot(sampling_data,aes(trial_number,sampling_choice_consistent_b,color=current_category_training_level))+geom_smooth(method="lm")
+#increasing confirming choices in the Broad condition
+```
+
 ### Constraining Sampling Choices
 
 ```{r}
@@ -348,6 +370,23 @@ t.test(subj_sampling$mean_consistent)
 t.test(subj_sampling$mean_narrowly_constraining)
 t.test(subj_sampling$mean_consistent,subj_sampling$mean_narrowly_constraining,paired=T)
 t.test(subj_sampling$mean_consistent_adj,subj_sampling$mean_narrowly_constraining_adj,paired=T)
+```
+
+#### Trial Number
+
+Exploratory analysis looking at the effect of trial number and its interaction with training condition.
+
+```{r}
+#effect of trial number
+m <- glmer(sampling_choice_narrow_constraining_b~offset(logit(chance_narrowly_constraining))+trial_number_c+(1+trial_number_c|subject), data=sampling_data, family=binomial)
+summary(m)
+
+m <- glmer(sampling_choice_narrow_constraining_b~offset(logit(chance_narrowly_constraining))+current_category_training_level*trial_number_c+(1|subject), data=sampling_data, family=binomial)
+summary(m)
+Anova(m,type="III")
+
+#quick peek to understand the interaction
+ggplot(sampling_data,aes(trial_number,sampling_choice_narrow_constraining_b,color=current_category_training_level))+geom_smooth(method="lm")
 ```
 
 # Test
