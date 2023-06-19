@@ -1,4 +1,16 @@
 //generate instructions
+function generate_learning_instructions_single_object(current_training_label, current_training_images) {
+    var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<div class="row">';
+    current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+    current_learning_stimulus+='<div class="column"><img src="'+current_training_images[0]+'" style="width:70%;opacity:0"></div></div>';
+    current_learning_stimulus+='<p><b><font size="4.5">On the next page, we will check your memory of this new word. Make sure you look at the example and the new word carefully.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<p><i>Click Next when you are ready to continue.</font></i><style="text-align:center;" /p></div>';  
+    return(current_learning_stimulus)
+}
+
+
 function generate_learning_instructions(current_training_label, current_training_images) {
     var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<p><b><font size="4.5">These are 3 '+current_training_label+'s.</font></b><style="text-align:center;" /p>';
