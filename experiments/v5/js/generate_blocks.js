@@ -1,4 +1,16 @@
 //generate instructions
+function generate_learning_instructions_single_object(current_training_label, current_training_images) {
+    var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<div class="row">';
+    current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+    current_learning_stimulus+='<div class="column"><img src="'+current_training_images[0]+'" style="width:70%;opacity:0"></div></div>';
+    current_learning_stimulus+='<p><b><font size="4.5">On the next page, we will check your memory of this new word. Make sure you look at the example and the new word carefully.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<p><i>Click Next when you are ready to continue.</font></i><style="text-align:center;" /p></div>';  
+    return(current_learning_stimulus)
+}
+
+
 function generate_learning_instructions(current_training_label, current_training_images) {
     var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<p><b><font size="4.5">These are 3 '+current_training_label+'s.</font></b><style="text-align:center;" /p>';
@@ -228,6 +240,27 @@ function generate_block(trial, training_types) {
   cur_block.push(check_trial);
 
   // display sampling trial
+  var sampling_trial = {
+    type: 'html-button-response-cols',
+    stimulus: current_sampling_stimulus,
+    choices: current_sample_array,
+    button_html: '<button class="jspsych-btn-image-array">%choice%</button>',
+    data: {
+      current_training_images: current_training_images,
+      current_training_label: current_training_label,
+      shuffled_sampling_images: shuffled_sampling_images,
+      sampling_image_words: sampling_image_words,
+      shuffled_test_images: shuffled_images,
+      current_category_label_level: current_category_label_level,
+      current_category_kind: current_category_kind,
+      current_category_training_level,
+      current_alternate_training_label: current_alternate_training_label,
+      trial_type: "sampling"
+    }
+  }
+
+  cur_block.push(sampling_trial);
+
   var sampling_trial = {
     type: 'html-button-response-cols',
     stimulus: current_sampling_stimulus,
