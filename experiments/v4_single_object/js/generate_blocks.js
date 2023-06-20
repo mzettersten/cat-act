@@ -3,7 +3,7 @@ function generate_learning_instructions_single_object(current_training_label, cu
     var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<div class="row">';
-    current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:50%; text-align:center"><figcaption style="font-size:24px; text-align:center">'+current_training_label+'</figcaption></figure></div></div>';
+    current_learning_stimulus+='<div class="d-flex align-items-center"><figure style="text-align:center"><img src="'+current_training_images[0]+'" style="width:18%"><figcaption style="font-size:24px; text-align:center;">'+current_training_label+'</figcaption></figure></div></div>';
     current_learning_stimulus+='<p><b><font size="4.5">On the next page, we will check your memory of this new word. Make sure you look at the example and the new word carefully.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<p><i>Click Next when you are ready to continue.</font></i><style="text-align:center;" /p></div>';  
     return(current_learning_stimulus)
@@ -13,8 +13,8 @@ function generate_learning_instructions_single_object(current_training_label, cu
 function generate_check_instructions(current_training_label, current_training_images) {
     var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Please enter the new word you just saw.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<div class="row">';
-    current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:50%; text-align:center"><figcaption style="font-size:24px"></figcaption></figure></div></div>';
-    current_learning_stimulus+='<p> What is the word you just learned for these three objects?</p><p><input name="name_check" type="text" id="test-resp-box" size="20" required/></p>';
+    current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:18%"><figcaption style="font-size:24px"></figcaption></figure></div></div>';
+    current_learning_stimulus+='<p> What is the word you just learned for this new object?</p><p><input name="name_check" type="text" id="test-resp-box" size="20" required/></p>';
     current_learning_stimulus+='<p><i>Click Next to continue.</font></i><style="text-align:center;" /p></div>';  
     return(current_learning_stimulus)
 
@@ -25,7 +25,7 @@ function generate_sampling_instructions(current_training_label, current_training
   var current_sampling_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>'
   current_sampling_stimulus +='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
   current_sampling_stimulus +='<div class="row">';
-  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:20%; text-align:center"><figcaption style="font-size:24px; text-align:center">'+current_training_label+'</figcaption></figure></div></div>';
+  current_sampling_stimulus +='<div class="d-flex align-items-center"><figure><img src="'+current_training_images[0]+'" style="width:18%"><figcaption style="font-size:24px; text-align:center">'+current_training_label+'</figcaption></figure></div></div>';
   current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make one choice, so choose carefully!</font></b></p>'
   current_sampling_stimulus +='<p><i><font size="4.5">Click on the object that you would like to know the name of.</font></i><style="text-align:center;" /p>';
   //current_sampling_stimulus +='<div class="row"><div class="column"></div></div></div>';
@@ -38,8 +38,10 @@ function generate_selection_instructions(current_training_label, current_samplin
   var current_selection_stimulus = '<div id="container">'
   current_selection_stimulus += '<p><b><font size="4.5">The image you selected is a <span style="color:#ff0000"><u>'+current_sampling_label+'</u></span>.</font></b><style="text-align:center;" /p>'
   current_selection_stimulus += '<div class="row">';
+  current_selection_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%; opacity:0"><figcaption style="font-size:24px"></figcaption></figure></div>';
   current_selection_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
-  current_selection_stimulus += '<div class="column"><figure><img src="'+current_sampling_image+'" style="width:70%; border: 5px solid #ff0000; padding: 6px"><figcaption style="font-size:24px;color:#ff0000">'+current_sampling_label+'</figcaption></figure></div class="column"></div class="column">';
+  current_selection_stimulus += '<div class="column"><figure><img src="'+current_sampling_image+'" style="width:70%; border: 5px solid #ff0000; padding: 6px"><figcaption style="font-size:24px;color:#ff0000">'+current_sampling_label+'</figcaption></figure></div>';
+  current_selection_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%; opacity:0"><figcaption style="font-size:24px"></figcaption></figure></div class="column"></div>';
   current_selection_stimulus += '<div id="container"><p><b><font size="4.5">Next, you will see a set of 24 new objects and decide which of them are '+current_training_label+'s.</font></b>';
   current_selection_stimulus += '<div id="container"><p><b><font size="4.5">Your goal is to select <u>all</u> of the '+current_training_label+'s.</font></b>';
   current_selection_stimulus += '<p><i><font size="4.5">Click Next to continue.</font></i><style="text-align:center;" /p><style="text-align:center;" /p></div>';
@@ -52,8 +54,10 @@ function generate_test_instructions(current_training_label, current_sampling_lab
   var current_test_stimulus = '<div id="container">';
   current_test_stimulus += '<p style="margin-block-start:0.1em;margin-block-end:0.1em"><font size="4.5"><b>Now, pick <u>all of the other '+current_training_label+'s</u>. </b></font><style="text-align:center;" /p>';
   current_test_stimulus += '<div class="row">';
-  current_test_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:30%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
-  current_test_stimulus += '<div class="column"><figure><img src="'+current_sampling_image+'" style="width:30%"><figcaption style="font-size:24px">'+current_sampling_label+'</figcaption></figure></div class="column"></div class="column">';
+  current_test_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%; opacity:0"><figcaption style="font-size:24px"></figcaption></figure></div>';
+  current_test_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+  current_test_stimulus += '<div class="column"><figure><img src="'+current_sampling_image+'" style="width:70%"><figcaption style="font-size:24px">'+current_sampling_label+'</figcaption></figure></div>';
+  current_test_stimulus += '<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%; opacity:0"><figcaption style="font-size:24px"></figcaption></figure></div class="column"></div>';
   //current_test_stimulus += '<p><b><font size="4.5">Now, pick <u>all of the '+current_training_label+'s</u> from among these 24 objects.</font></b><style="text-align:center;" /p>';
   //current_test_stimulus += '<p><b><font size="4.5">You can pick an object by clicking on it. Objects you select will turn red. You can also unselect items by clicking on them again. ';
   //current_test_stimulus += 'When you are finished selecting <u>all</u> of the objects you think are '+current_training_label+'s, press the submit button at the bottom of the page.</font></b><style="text-align:center;" /p></div>';
@@ -421,7 +425,7 @@ var debrief_questions = {
     type: 'survey-text',
     questions: [
     {prompt: "Did you use a strategy to figure out what each word meant? If yes, please explain",name: "strategy", rows: 3,columns: 60, required: true},
-    {prompt: "After seeing a new word and the first three examples, how did you choose which (fourth) object to see a word for next?",name: "choice_strategy", rows: 3,columns: 60, required: true},
+    {prompt: "After seeing a new word and the first example, how did you choose which (second) object to see a word for next?",name: "choice_strategy", rows: 3,columns: 60, required: true},
     {prompt: "Any additional comments?", name: "comments", rows: 3,columns: 60}
     ],
 
