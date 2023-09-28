@@ -1046,3 +1046,4 @@ data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-27_20h34.05.515.
 data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-27_23h22.08.638.csv
 data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-27_23h30.20.300.csv
 data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-27_23h30.23.322.csv
+analysis/free-sort/check_submissions.R

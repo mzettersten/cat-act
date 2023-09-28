@@ -1,13 +1,13 @@
 library(here)
 library(tidyverse)
 
-data_directory <- here("..","..","data","v1","raw")
-processed_data_directory <- here("..","..","data","v1","processed")
-file_name <- "catact-v1"
+data_directory <- here("data","free-sort","raw")
+processed_data_directory <- here("data","free-sort","processed")
+file_name <- "catact-free-sort"
 
 merge_and_deidentify_data <- function(raw_data_directory, 
                                       merged_data_path, 
-                                      min_row=32) {
+                                      min_row=19) {
   
   raw_files <- here(raw_data_directory, dir(here(raw_data_directory), "*.csv"))
   
