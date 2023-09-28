@@ -4,10 +4,12 @@ library(jsonlite)
 library(ggimage)
 #install_github("YuLab-SMU/ggtree")
 library(harrietr) #need to have ggtree installed too, download from github if necessary
+library(dendextend)
 
-source(here("analysis","free-sort","helper.R"))
+source(here::here("analysis","free-sort","helper.R"))
 
 data_path <- here("data","free-sort","processed","catact-free-sort-alldata-anonymized.csv")
+FIGURE_PATH <- here("analysis","free-sort","figures")
 
 d <-  read_csv(data_path)
 
@@ -51,6 +53,7 @@ sorting_long_nested_by_trial <- sorting_long %>%
   ) %>%
   group_by(subject, stim_category) %>%
   nest(data = c(subject_id,stim_id,x, y, image_path,image_name,image_name_minus_ext,image_name_level)) 
+  #tidyr::nest(data = everything(), .by=c(subject, stim_category)) 
 
 sorting_long_nested_by_trial %>%
   #use map to apply plotting function to each trial
@@ -99,8 +102,26 @@ clusters_by_stim <- avg_dist %>%
   mutate(cluster=lapply(dist_obj, function(d) clean_cluster(d))) %>%
   mutate(dend = lapply(cluster, function(clst) clst %>% as.dendrogram()))
 
-#look at one clustering solution
+#look at a few clustering solutions
 clusters_by_stim  %>% filter(stim_category=="stims_ani") %>% pull(dend) %>% pluck(1) %>% plot(main="Animal Category")
 clusters_by_stim  %>% filter(stim_category=="stims_boa") %>% pull(dend) %>% pluck(1) %>% plot(main="Boat Category")
 clusters_by_stim  %>% filter(stim_category=="stims_spo") %>% pull(dend) %>% pluck(1) %>% plot(main="Sports Category")
 clusters_by_stim  %>% filter(stim_category=="stims_mus") %>% pull(dend) %>% pluck(1) %>% plot(main="Music Category")
+
+#plot all dendrograms
+for (stim_cat in unique(clusters_by_stim$stim_category)) {
+  print(stim_cat)
+  #set up figure
+  figure_name <- paste0(stim_cat,"_dendrogram.png")
+  figure_path_name <- here(FIGURE_PATH,figure_name)
+  png(figure_path_name) 
+  #plot the relevant cluster
+  clusters_by_stim  %>% 
+    filter(stim_category==stim_cat) %>% 
+    pull(dend) %>% 
+    pluck(1) %>% 
+    plot(main=stim_cat)
+  #finish saving the figure
+  dev.off()
+    }
+
