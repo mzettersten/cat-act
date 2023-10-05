@@ -1077,3 +1077,5 @@ data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-28_16h41.16.980.
 data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-28_16h53.44.940.csv
 data/free-sort/raw/catact-free-sort_PARTICIPANT_SESSION_2023-09-28_17h29.55.321.csv
 data/free-sort/subj_info/connect_info.csv
+analysis/free-sort/dreamsim.ipynb
+analysis/free-sort/.ipynb_checkpoints/dreamsim-checkpoint.ipynb
