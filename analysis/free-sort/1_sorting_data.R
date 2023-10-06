@@ -97,6 +97,8 @@ avg_dist <- avg_dist_long %>%
   nest() %>%
   mutate(dist_obj = purrr::map(data, long_to_dist))
 
+write_csv(avg_dist_long,here("data","free-sort","processed","catact-free-sort-average_distances.csv"))
+
 #### create overall grouped cluster objects ####
 clusters_by_stim <- avg_dist %>%
   mutate(cluster=lapply(dist_obj, function(d) clean_cluster(d))) %>%
