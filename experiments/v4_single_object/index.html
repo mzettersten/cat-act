@@ -91,8 +91,14 @@
         });
 
         //create image array for preloading
-        var all_grid_images = grid_image_names.concat(sampling_image_names);
-        var all_images = all_grid_images.concat(training_image_names);
+        var grid_image_names_1 = grid_image_names["set1"];
+        var all_grid_images = grid_image_names_1.concat(grid_image_names["set2"]);
+        var sampling_image_names_1 = sampling_image_names["set1"];
+        var all_sampling_image_names = sampling_image_names_1.concat(sampling_image_names["set2"]);
+        var training_image_names_1 = training_image_names["set1"];
+        var all_training_image_names = training_image_names_1.concat(training_image_names["set2"]);
+        var all_sampling_grid_images = all_grid_images.concat(all_sampling_image_names);
+        var all_images = all_sampling_grid_images.concat(all_training_image_names);
         console.log(all_images);
 
         // create timeline
@@ -125,7 +131,7 @@
         timeline.push(enter_fullscreen);
 
 		// create instructions and push to timeline
-		var instructions_page_stimulus = '<div id="container"><p><b><font size="4.5">Welcome to the experiment!</font></b></p><p><font size="4.5">In this experiment, we are interested in how people learn the meanings of new words.</font></p><p>Imagine you are learning a brand new language. Someone tells you a new word for the first time. Can you figure out what the word means? In this experiment, you will be shown objects together with their names in a made-up language. Your job is to learn these new words. </p><p><font size="4.5">Here'+"'"+'s how the experiment will work. First, you will see a new word and three examples of the word. Next, we will check your memory for this new word. Then, you will see objects which may or may not also match the new word. You will get a chance to choose one of these objects and learn its name. Finally, you will select all of the objects that you think match the new word. <b>Remember, your job is to figure out what the new word means and which objects match the new word.</b></p><p><font size="4.5">This process will repeat, with a brand new word. You will learn three words total following these steps. Do your best to figure out what each word means. <b>The top 50 participants (out of 200) who do the best at identifying the meanings of new words will receive a $0.20 bonus in addition to the base compensation for the task.</b></p></font></p><p><i><font size="4.5">Click Next to begin the experiment and learn the first word!</font></i></p></div>';
+		var instructions_page_stimulus = '<div id="container"><p><b><font size="4.5">Welcome to the experiment!</font></b></p><p><font size="4.5">In this experiment, we are interested in how people learn the meanings of new words.</font></p><p>Imagine you are learning a brand new language. Someone tells you a new word for the first time. Can you figure out what the word means? In this experiment, you will be shown objects together with their names in a made-up language. Your job is to learn these new words. </p><p><font size="4.5">Here'+"'"+'s how the experiment will work. First, you will see a new word and three examples of the word. Next, we will check your memory for this new word. Then, you will see objects which may or may not also match the new word. You will get a chance to choose one of these objects and learn its name. Finally, you will select all of the objects that you think match the new word. <b>Remember, your job is to figure out what the new word means by learning which objects match the new word and which objects do NOT match the new word.</b></p><p><font size="4.5">This process will repeat, with a brand new word. You will learn three words total following these steps. Do your best to figure out what each word means. <b>The top 50 participants (out of 200) who do the best at identifying the meanings of new words will receive a $0.20 bonus in addition to the base compensation for the task.</b></p></font></p><p><i><font size="4.5">Click Next to begin the experiment and learn the first word!</font></i></p></div>';
 		// display instructions page
 		var instructions = {
 			type: 'html-button-response',
@@ -138,7 +144,7 @@
     // BUILD TRIALS
     // key parameters
     var category_levels = ["narrow","intermediate","broad"];
-    var training_labels = ["sibu","kita","beppo"];
+    var training_labels = ["a sibu","a kita","a beppo"];
     var alternate_training_labels = ["tibble", "roozer", "guffy"];
     
 

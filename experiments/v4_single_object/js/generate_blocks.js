@@ -2,7 +2,7 @@
 function generate_learning_instructions(current_training_label, current_training_images,number_training_images=3) {
     var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
     if (number_training_images == 1) {
-    current_learning_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<p><b><font size="4.5">This is '+current_training_label+'.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<div class="row">';
     current_learning_stimulus+='<div class="column"><figure style="opacity:0"><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
     current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:50%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
@@ -48,7 +48,7 @@ function generate_sampling_instructions(current_training_label, current_training
 
   var current_sampling_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>'
   if (number_training_images == 1) {
-  current_sampling_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
+  current_sampling_stimulus+='<p><b><font size="4.5">This is '+current_training_label+'.</font></b><style="text-align:center;" /p>';
   current_sampling_stimulus+='<div class="row">';
    current_sampling_stimulus+='<div class="column"><figure style="opacity:0"><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
     current_sampling_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:50%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
@@ -72,7 +72,7 @@ function generate_selection_instructions(current_training_label, current_samplin
 
   //var current_selection_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
   var current_selection_stimulus = '<div id="container">'
-  current_selection_stimulus += '<p><b><font size="4.5">The image you selected is a <span style="color:#ff0000"><u>'+current_sampling_label+'</u></span>.</font></b><style="text-align:center;" /p>'
+  current_selection_stimulus += '<p><b><font size="4.5">The image you selected is <span style="color:#ff0000"><u>'+current_sampling_label+'</u></span>.</font></b><style="text-align:center;" /p>'
   current_selection_stimulus += '<div class="row">';
   if (number_training_images == 1) {
    current_selection_stimulus+='<div class="column"><figure style="opacity:0"><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
@@ -123,7 +123,7 @@ function generate_test_instructions(current_training_label, current_sampling_lab
 
 
 // generate a block for CatAct
-function generate_block(trial, training_types) {
+function generate_block(trial, training_types, set) {
 
   var cur_block=[];
 	current_trial_info = training_types[trial];
@@ -132,7 +132,7 @@ function generate_block(trial, training_types) {
   // PREPPTING THE SELECTION ARRAYS
 		  
 	//shuffle the grid images
-  var shuffled_images = jsPsych.randomization.repeat(grid_image_names, 1);
+  var shuffled_images = jsPsych.randomization.repeat(grid_image_names[set], 1);
 	//put images together into an array
 	var current_grid_array=[]
   for (var i = 0; i < shuffled_images.length; i++) {
@@ -140,7 +140,7 @@ function generate_block(trial, training_types) {
   }
   
   // shuffle sampling array
-  var shuffled_sampling_images = jsPsych.randomization.repeat(sampling_image_names, 1);
+  var shuffled_sampling_images = jsPsych.randomization.repeat(sampling_image_names[set], 1);
 	// put sampling images together into an array
 	var current_sample_array=[];
   for (var i = 0; i < shuffled_sampling_images.length; i++) {
@@ -241,7 +241,7 @@ function generate_block(trial, training_types) {
       shuffled_test_images: shuffled_images,
       current_category_label_level: current_category_label_level,
       current_category_kind: current_category_kind,
-      current_category_training_level,
+      current_category_training_level: current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "learning"
     },
@@ -262,7 +262,7 @@ function generate_block(trial, training_types) {
       shuffled_test_images: shuffled_images,
       current_category_label_level: current_category_label_level,
       current_category_kind: current_category_kind,
-      current_category_training_level,
+      current_category_training_level: current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "label_check"
     },
@@ -284,7 +284,7 @@ function generate_block(trial, training_types) {
       shuffled_test_images: shuffled_images,
       current_category_label_level: current_category_label_level,
       current_category_kind: current_category_kind,
-      current_category_training_level,
+      current_category_training_level: current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "sampling"
     }
@@ -317,7 +317,7 @@ function generate_block(trial, training_types) {
       shuffled_test_images: shuffled_images,
       current_category_label_level: current_category_label_level,
       current_category_kind: current_category_kind,
-      current_category_training_level,
+      current_category_training_level: current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "sampling_feedback"
     }
@@ -356,7 +356,7 @@ function generate_block(trial, training_types) {
       shuffled_test_images: shuffled_images,
       current_category_label_level: current_category_label_level,
       current_category_kind: current_category_kind,
-      current_category_training_level,
+      current_category_training_level: current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "test"
     }
@@ -382,7 +382,7 @@ function generate_block(trial, training_types) {
       shuffled_test_images: shuffled_images,
       current_category_label_level: current_category_label_level,
       current_category_kind: current_category_kind,
-      current_category_training_level,
+      current_category_training_level: current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "test_meaning"
     },
@@ -400,7 +400,7 @@ function generate_all_blocks(trial_order, training_types) {
   var all_blocks=[];
   for (var j = 0; j < trial_order.length; j++) {
     trial=trial_order[j];
-    cur_block=generate_block(trial, training_types)
+    cur_block=generate_block(trial, training_types,"set2")
     all_blocks=all_blocks.concat(cur_block)
 
     if (j < trial_order.length - 1) {

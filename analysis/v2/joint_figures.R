@@ -98,6 +98,69 @@ ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_catego
         axis.text.x  = element_text(angle=90, hjust=1,vjust=0.4))
 ggsave(here(figure_path,"sampling_choices_exps1_2_wide.pdf"),width=12,height=9)
 
+## Sampling Choices - individual bars
+sampling_data_long_structure <- expand.grid(
+  subject=unique(sampling_data$subject),
+  current_category_training_level=unique(sampling_data$current_category_training_level),
+  sampling_choice_type = c("subordinate","basic","superordinate","outside category")
+)
+sampling_data_long <-  sampling_data %>%
+  group_by(subject,version_name, current_category_training_level) %>%
+  summarize(sampling_response = sampled_category_level_kind_info_ord)
+sampling_data_long_structure <- sampling_data_long_structure %>%
+  left_join(sampling_data_long) %>%
+  mutate(
+    sampling_choice_chosen = case_when(
+      sampling_response == sampling_choice_type ~ 1,
+      TRUE ~ 0
+    )
+  )
+
+sampling_data_long_structure_summarized <- sampling_data_long_structure %>%
+  filter(!is.na(version_name)) %>%
+  group_by(version_name,current_category_training_level, sampling_choice_type) %>%
+  summarize(
+    N=n(),
+    sampling_response_avg=mean(sampling_choice_chosen,na.rm=TRUE),
+    sampling_response_total=sum(sampling_choice_chosen,na.rm=TRUE),
+    sampling_response_binom_lower=binom.test(sampling_response_total,N)$conf.int[1],
+    sampling_response_binom_upper=binom.test(sampling_response_total,N)$conf.int[2],
+  )
+sampling_data_long_structure_summarized$current_category_training_level_ord <- factor(sampling_data_long_structure_summarized$current_category_training_level,levels=c("narrow","intermediate","broad"))
+
+
+ggplot(filter(sampling_data_long_structure_summarized,version_name=="Experiment 1"),aes(current_category_training_level_ord,sampling_response_avg, group=sampling_choice_type,fill=sampling_choice_type))+
+  geom_errorbar(aes(ymin=sampling_response_binom_lower, ymax=sampling_response_binom_upper),width=0.3, color="black",position=position_dodge(width=0.9))+
+  geom_bar(stat="identity",position=position_dodge())+
+  theme_cowplot(font_size=30)+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  scale_color_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  xlab("Training Condition")+
+  ylab("Proportion of Sampling Choices")
+ggsave(here(figure_path,"sampling_choices_exp1_long.png"),width=16,height=9)
+ggsave(here(figure_path,"sampling_choices_exp1.png"),width=12,height=9)
+
+ggplot(filter(sampling_data_long_structure_summarized,version_name=="Experiment 2"),aes(current_category_training_level_ord,sampling_response_avg, group=sampling_choice_type,fill=sampling_choice_type))+
+  geom_errorbar(aes(ymin=sampling_response_binom_lower, ymax=sampling_response_binom_upper),width=0.3, color="black",position=position_dodge(width=0.9))+
+  geom_bar(stat="identity",position=position_dodge())+
+  theme_cowplot(font_size=30)+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  scale_color_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  xlab("Training Condition")+
+  ylab("Proportion of Sampling Choices")
+ggsave(here(figure_path,"sampling_choices_exp2_long.png"),width=16,height=9)
+ggsave(here(figure_path,"sampling_choices_exp2.png"),width=12,height=9)
+
+ggplot(sampling_data_long_structure_summarized,aes(current_category_training_level_ord,sampling_response_avg, group=sampling_choice_type,fill=sampling_choice_type))+
+  geom_errorbar(aes(ymin=sampling_response_binom_lower, ymax=sampling_response_binom_upper),width=0.3, color="black",position=position_dodge(width=0.9))+
+  geom_bar(stat="identity",position=position_dodge())+
+  theme_cowplot(font_size=30)+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  scale_color_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  facet_wrap(~version_name)+
+  xlab("Training Condition")+
+  ylab("Proportion of Sampling Choices")
+ggsave(here(figure_path,"sampling_choices_exp1_2_long.png"),width=18,height=9)
 
 ## Training Trial Order
 ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
@@ -109,7 +172,7 @@ ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_catego
   theme_cowplot(font_size=16)+
   theme(axis.title = element_text(face="bold", size=18),
         axis.text.x  = element_text(angle=90, hjust=1,vjust=0.4))
-ggsave(here(figure_path,"sampling_choices_exps1_2_by_trial.pdf"),width=12,height=9)
+ggsave(here(figure_path,"sampling_choices_exps1_2_by_trial.png"),width=12,height=9)
 
 ## Test Plot
 
@@ -304,6 +367,7 @@ p1 <- ggplot(filter(subj_test_accuracy_all_summarized,version==1),aes(mean_consi
   theme(axis.title = element_text(face="bold", size=30))+
   ggtitle("Experiment 1") +
   theme(plot.title = element_text(hjust = 0.5, face="bold",size=28))
+ggsave(here(figure_path,"sampling_test_confirming_exp1.png"),width=9,height=6)
 
 p2 <- ggplot(filter(subj_test_accuracy_all_summarized,version==1),aes(mean_narrowly_constraining,avg_dprime))+
   geom_jitter(width=0.05,alpha=0.5)+
@@ -315,6 +379,7 @@ p2 <- ggplot(filter(subj_test_accuracy_all_summarized,version==1),aes(mean_narro
   theme(axis.title = element_text(face="bold", size=30))+
   ggtitle("Experiment 1") +
   theme(plot.title = element_text(hjust = 0.5, face="bold",size=28))
+ggsave(here(figure_path,"sampling_test_constraining_exp1.png"),width=9,height=6)
 
 p3 <- ggplot(filter(subj_test_accuracy_all_summarized,version==2),aes(mean_consistent,avg_dprime))+
   geom_jitter(width=0.05,alpha=0.5)+

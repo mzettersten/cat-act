@@ -7,7 +7,8 @@ var grid_image_height = 100;
 var image_path="stims/"
 
 // store names of test phase image files
-var grid_image_names = [
+var grid_image_names = {
+	set1: [
 "stims/ani_c3_sup3.jpg",
 "stims/ani_c3_sup4.jpg",
 "stims/ani_c3_sup5.jpg",
@@ -31,12 +32,40 @@ var grid_image_names = [
 "stims/veh_c2_bas3.jpg",
 "stims/veh_c2_bas4.jpg",
 "stims/veh_c2_sub4.jpg",
-"stims/veh_c2_sub5.jpg"];
+"stims/veh_c2_sub5.jpg"
+		],
+	set2: [
+		"stims/fru_c4_sup3.jpg",
+"stims/fru_c4_sup4.jpg",
+"stims/fru_c4_sup5.jpg",
+"stims/fru_c4_sup6.jpg",
+"stims/fru_c4_bas3.jpg",
+"stims/fru_c4_bas4.jpg",
+"stims/fru_c4_sub4.jpg",
+"stims/fru_c4_sub5.jpg",
+"stims/mus_c5_sup3.jpg",
+"stims/mus_c5_sup4.jpg",
+"stims/mus_c5_sup5.jpg",
+"stims/mus_c5_sup6.jpg",
+"stims/mus_c5_bas3.jpg",
+"stims/mus_c5_bas4.jpg",
+"stims/mus_c5_sub4.jpg",
+"stims/mus_c5_sub5.jpg",
+"stims/sea_c6_sup3.jpg",
+"stims/sea_c6_sup4.jpg",
+"stims/sea_c6_sup5.jpg",
+"stims/sea_c6_sup6.jpg",
+"stims/sea_c6_bas3.jpg",
+"stims/sea_c6_bas4.jpg",
+"stims/sea_c6_sub4.jpg",
+"stims/sea_c6_sub5.jpg"]
+};
 
 console.log(grid_image_names)
 
 // store names of sampling phase image files
-var sampling_image_names = [
+var sampling_image_names = {
+	set1: [
 "stims/ani_c3_sub4.jpg",
 "stims/ani_c3_sup3.jpg",
 "stims/ani_c3_bas3.jpg",
@@ -45,9 +74,21 @@ var sampling_image_names = [
 "stims/veg_c1_bas3.jpg",
 "stims/veh_c2_sub4.jpg",
 "stims/veh_c2_sup3.jpg",
-"stims/veh_c2_bas3.jpg"];
+"stims/veh_c2_bas3.jpg"],
+	set2: [
+"stims/fru_c4_sub4.jpg",
+"stims/fru_c4_sup3.jpg",
+"stims/fru_c4_bas3.jpg",
+"stims/mus_c5_sub4.jpg",
+"stims/mus_c5_sup3.jpg",
+"stims/mus_c5_bas3.jpg",
+"stims/sea_c6_sub4.jpg",
+"stims/sea_c6_sup3.jpg",
+"stims/sea_c6_bas3.jpg"]
+};
 
-var training_image_names = [
+var training_image_names = {
+	set1: [
 "stims/ani_c3_sub1.jpg",
 "stims/ani_c3_sub2.jpg",
 "stims/ani_c3_sub3.jpg",
@@ -68,5 +109,28 @@ var training_image_names = [
 "stims/veh_c2_bas1.jpg",
 "stims/veh_c2_bas2.jpg",
 "stims/veh_c2_sup1.jpg",
-"stims/veh_c2_sup2.jpg",];
+"stims/veh_c2_sup2.jpg"],
+	set2: [
+	"stims/fru_c4_sub1.jpg",
+"stims/fru_c4_sub2.jpg",
+"stims/fru_c4_sub3.jpg",
+"stims/fru_c4_bas1.jpg",
+"stims/fru_c4_bas2.jpg",
+"stims/fru_c4_sup1.jpg",
+"stims/fru_c4_sup2.jpg",
+"stims/mus_c5_sub1.jpg",
+"stims/mus_c5_sub2.jpg",
+"stims/mus_c5_sub3.jpg",
+"stims/mus_c5_bas1.jpg",
+"stims/mus_c5_bas2.jpg",
+"stims/mus_c5_sup1.jpg",
+"stims/mus_c5_sup2.jpg",
+"stims/sea_c6_sub1.jpg",
+"stims/sea_c6_sub2.jpg",
+"stims/sea_c6_sub3.jpg",
+"stims/sea_c6_bas1.jpg",
+"stims/sea_c6_bas2.jpg",
+"stims/sea_c6_sup1.jpg",
+"stims/sea_c6_sup2.jpg"]
+};
 
