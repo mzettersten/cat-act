@@ -242,6 +242,26 @@ p2
 plot_grid(p1,p2,ncol=1,labels=c("A","B"),label_size=24)
 ggsave(here(figure_path,"test_choices_exps1_2.pdf"),width=6,height=11)
 
+# test choices just for Experiment 1, wider
+
+ggplot(filter(overall_test_prop_long,version==1),aes(choice_type_ord,avg_prop,fill=choice_type_ord))+
+  geom_bar(stat="identity")+
+  geom_errorbar(aes(ymin=prop_lower_ci,ymax=prop_upper_ci),width=0.1)+
+  facet_wrap(~current_category_training_level_ord)+
+  theme_cowplot(font_size=20)+
+  scale_fill_manual(
+    name="Test Choice Type",
+    values=c("#d7191c","#fdae61","#abd9e9"))+
+  xlab("Test Choice Type")+
+  ylab("Average Proportion of Test Choices")+
+  theme(axis.title = element_text(face="bold", size=32),
+        axis.text.x  = element_text(size=24),
+        strip.text.x = element_text(size = 24,face="bold"))+
+  scale_x_discrete(breaks=c("subordinate","basic","superordinate"),
+                   labels=c("sub-\nordinate","basic","super-\nordinate"))+
+  theme(legend.position="none")
+ggsave(here(figure_path,"test_choices_exp1_wider.png"),width=16,height=9)
+
 ## Relationship between Test and Sampling
 
 ### longer test representation
@@ -354,6 +374,7 @@ p4 <- ggplot(filter(subj_test_accuracy_all,version==2),aes(mean_narrowly_constra
 
 plot_grid(p1,p3,p2,p4,ncol=2,labels=c("A","B","C","D"),label_size=28)
 ggsave(here(figure_path,"sampling_test_exp12.pdf"),width=12,height=12)
+ggsave(here(figure_path,"sampling_test_exp12.png"),width=12,height=12)
 
 ## Option 2: Summarizing across test trials for each subject
 
@@ -405,3 +426,32 @@ p4 <- ggplot(filter(subj_test_accuracy_all_summarized,version==2),aes(mean_narro
 
 plot_grid(p1,p3,p2,p4,ncol=2,labels=c("A","B","C","D"),label_size=28)
 ggsave(here(figure_path,"sampling_test_summarized_exp12.pdf"),width=12,height=12)
+ggsave(here(figure_path,"sampling_test_summarized_exp12.png"),width=12,height=12)
+
+#subject sampling by item
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,fill=sampled_category_level_kind_info_ord))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  facet_wrap(~current_category_training_level_ord+current_category_kind)+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+        axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+ggsave(here(figure_path,"sampling_by_category_summarizingexp12.png"),width=12,height=9)
+
+ggplot(sampling_data,aes(x=sampled_category_level_kind_info_ord,fill=sampled_category_level_kind_info_ord))+
+  geom_histogram(stat="count")+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  facet_wrap(~current_category_training_level_ord+trial_number)+
+  scale_x_discrete(
+    name = "Sampled Category Level",
+    labels = c("subordinate","basic","superordinate","other category")
+  )+
+  theme_cowplot()+
+  theme(axis.title = element_text(face="bold", size=14),
+        axis.text.x  = element_text(angle=90, vjust=0.5, size=12))+
+  theme(legend.position="none")+
+  ylab("Number of Choices")
+
+ggsave(here(figure_path,"sampling_by_trial_number_summarizingexp12..png"),width=12,height=9)
