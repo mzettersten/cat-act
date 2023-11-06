@@ -3,12 +3,10 @@
 function get_training_types(
 	category_kinds, 
 	training_labels,
-	alternate_training_labels,
 	correct_category_labels) {
 
 	//shuffle elements
 	var training_labels_shuffled = jsPsych.randomization.shuffle(training_labels);
-	var alternate_training_labels_shuffled = jsPsych.randomization.shuffle(alternate_training_labels);
 
 	var training_types = {
 		narrow: {

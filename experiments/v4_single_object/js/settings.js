@@ -6,6 +6,11 @@ var grid_image_height = 100;
 
 var image_path="stims/"
 
+var category_kinds ={
+	set1: ["animals","vegetables","vehicles"],
+	set2: ["fruits","music","sea"]
+};
+
 // store names of test phase image files
 var grid_image_names = {
 	set1: [

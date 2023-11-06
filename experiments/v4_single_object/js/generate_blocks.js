@@ -123,7 +123,7 @@ function generate_test_instructions(current_training_label, current_sampling_lab
 
 
 // generate a block for CatAct
-function generate_block(trial, training_types, set) {
+function generate_block(trial, training_types, set,number_training_images) {
 
   var cur_block=[];
 	current_trial_info = training_types[trial];
@@ -161,9 +161,18 @@ function generate_block(trial, training_types, set) {
   } else if (current_category_kind=="vehicles") {
     var current_category_label = "c2";
     var current_category_kind_shortened = "veh";
-  } else {
+  } else if (current_category_kind=="animals") {
     var current_category_label = "c3";
     var current_category_kind_shortened = "ani";
+  } else if (current_category_kind=="fruits") {
+    var current_category_label = "c4";
+    var current_category_kind_shortened = "fru";
+  } else if (current_category_kind=="music") {
+    var current_category_label = "c5";
+    var current_category_kind_shortened = "mus";
+  } else if (current_category_kind=="sea") {
+    var current_category_label = "c6";
+    var current_category_kind_shortened = "sea";
   }
 
   console.log(current_training_label);
@@ -224,9 +233,9 @@ function generate_block(trial, training_types, set) {
 
   console.log(sampling_image_words)
 
-  var current_learning_stimulus = generate_learning_instructions(current_training_label, current_training_images,1); 
-  var current_check_stimulus = generate_check_instructions(current_training_label, current_training_images,1); 
-	var current_sampling_stimulus = generate_sampling_instructions(current_training_label, current_training_images,1);
+  var current_learning_stimulus = generate_learning_instructions(current_training_label, current_training_images,number_training_images); 
+  var current_check_stimulus = generate_check_instructions(current_training_label, current_training_images,number_training_images); 
+	var current_sampling_stimulus = generate_sampling_instructions(current_training_label, current_training_images,number_training_images);
 
   // display learning trial
   var learning_trial = {
@@ -306,7 +315,8 @@ function generate_block(trial, training_types, set) {
         last_trial_data.current_training_label, 
         last_trial_data.sampling_image_words[last_trial_data.response],
         last_trial_data.current_training_images,
-        last_trial_data.shuffled_sampling_images[last_trial_data.response],1)
+        last_trial_data.shuffled_sampling_images[last_trial_data.response],
+        number_training_images)
     },
     choices: ["Next"],
     data: {
@@ -339,7 +349,8 @@ function generate_block(trial, training_types, set) {
         last_trial_data.current_training_label, 
         last_trial_data.sampled_label,
         last_trial_data.current_training_images,
-        last_trial_data.sampled_image,1
+        last_trial_data.sampled_image,
+        number_training_images
         )
     },
     choices: current_grid_array,
@@ -395,12 +406,12 @@ function generate_block(trial, training_types, set) {
  } 
 
 // generate all blocks
-function generate_all_blocks(trial_order, training_types) {
+function generate_all_blocks(trial_order, training_types,current_set,number_training_images) {
 
   var all_blocks=[];
   for (var j = 0; j < trial_order.length; j++) {
     trial=trial_order[j];
-    cur_block=generate_block(trial, training_types,"set2")
+    cur_block=generate_block(trial, training_types,current_set,number_training_images)
     all_blocks=all_blocks.concat(cur_block)
 
     if (j < trial_order.length - 1) {

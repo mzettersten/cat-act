@@ -44,28 +44,33 @@
         assignmentId.replace(/[^A-Za-z0-9_]/g, "");
 
         //set up category conditions
-        var n_cat_level = getParamFromURL('n_cat_level');
-        var i_cat_level = getParamFromURL('i_cat_level');
-        var b_cat_level = getParamFromURL('b_cat_level');
+        // var n_cat_level = getParamFromURL('n_cat_level');
+        // var i_cat_level = getParamFromURL('i_cat_level');
+        // var b_cat_level = getParamFromURL('b_cat_level');
 
         var catk_n = getParamFromURL('catk_n');
         var catk_i = getParamFromURL('catk_i');
         var catk_b = getParamFromURL('catk_b');
+        var catk2_n = getParamFromURL('catk2_n');
+        var catk2_i = getParamFromURL('catk2_i');
+        var catk2_b = getParamFromURL('catk2_b');
+
+        var num_order = getParamFromURL('num_order');
+        var set_order = getParamFromURL('num_order');
 
         //make sure that nobody can enter anything damaging
-        n_cat_level.replace(/[^A-Za-z0-9_]/g, "");
-        i_cat_level.replace(/[^A-Za-z0-9_]/g, "");
-        b_cat_level.replace(/[^A-Za-z0-9_]/g, "");
+        // n_cat_level.replace(/[^A-Za-z0-9_]/g, "");
+        // i_cat_level.replace(/[^A-Za-z0-9_]/g, "");
+        // b_cat_level.replace(/[^A-Za-z0-9_]/g, "");
         catk_n.replace(/[^A-Za-z0-9_]/g, "");
         catk_i.replace(/[^A-Za-z0-9_]/g, "");
         catk_b.replace(/[^A-Za-z0-9_]/g, "");
+        catk2_n.replace(/[^A-Za-z0-9_]/g, "");
+        catk2_i.replace(/[^A-Za-z0-9_]/g, "");
+        catk2_b.replace(/[^A-Za-z0-9_]/g, "");
 
-        var correct_category_label_levels = create_correct_category_labels(n_cat_level,i_cat_level,b_cat_level);
-        console.log(correct_category_label_levels);
-
-        var category_kinds =["animals","vegetables","vehicles"];
-        var randomized_category_kinds = create_category_kinds(category_kinds,catk_n,catk_i,catk_b);
-        console.log(randomized_category_kinds);
+        num_order.replace(/[^A-Za-z0-9_]/g, "");
+        set_order.replace(/[^A-Za-z0-9_]/g, "");
         
         //create random code for final message
         var code = createCode("CatAct");
@@ -76,18 +81,21 @@
           workerId: workerId,
           hitId: hitId,
           assignmentId: assignmentId,
-          n_cat_level: n_cat_level,
-          narrow_category_label_level: correct_category_label_levels["narrow"],
-          i_cat_level: i_cat_level,
-          intermediate_category_label_level: correct_category_label_levels["intermediate"],
-          b_cat_level: b_cat_level,
-          broad_category_label_level: correct_category_label_levels["broad"],
+          //n_cat_level: n_cat_level,
+          //narrow_category_label_level: correct_category_label_levels["narrow"],
+          //i_cat_level: i_cat_level,
+          //intermediate_category_label_level: correct_category_label_levels["intermediate"],
+          //b_cat_level: b_cat_level,
+          //broad_category_label_level: correct_category_label_levels["broad"],
           catk_n: catk_n,
-          narrow_category_kind: randomized_category_kinds["narrow"],
+          //narrow_category_kind: randomized_category_kinds["narrow"],
           catk_i: catk_i,
-          intermediate_category_kind: randomized_category_kinds["intermediate"],
+          //intermediate_category_kind: randomized_category_kinds["intermediate"],
           catk_b: catk_b,
-          broad_category_kind: randomized_category_kinds["broad"],
+          //broad_category_kind: randomized_category_kinds["broad"],
+          catk2_n: catk2_n,
+          catk2_i: catk2_i,
+          catk2_b: catk2_b,
         });
 
         //create image array for preloading
@@ -142,21 +150,70 @@
 
 
     // BUILD TRIALS
-    // key parameters
-    var category_levels = ["narrow","intermediate","broad"];
-    var training_labels = ["a sibu","a kita","a beppo"];
-    var alternate_training_labels = ["tibble", "roozer", "guffy"];
+
+    var set_size = 2;
+
+    var training_labels = ["a sibu","a kita","a beppo","a tibble", "a roozer", "a guffy"];
+    var randomized_training_labels = jsPsych.randomization.shuffle(training_labels);
+    var training_label_dict = {
+      set1: [randomized_training_labels[0],randomized_training_labels[1],randomized_training_labels[2]],
+      set2: [randomized_training_labels[3],randomized_training_labels[4],randomized_training_labels[5]]
+    }
+
+    if (set_order == 1) {
+      sets = ["set1","set2"];
+    } else if (set_order == 2) {
+      sets = ["set2","set1"];
+    } else {
+      sets = jsPsych.randomization.sampleWithoutReplacement([["set1","set2"],["set2","set1"]],1)[0]
+    }
+    console.log(sets);
+
+    if (num_order == "1f") {
+      var number_training_images_in_order = [1,3];
+    } else if (num_order == "3f") {
+      var number_training_images_in_order = [3,1];
+    } else {
+      var number_training_images_in_order = [1,3];
+    }
+
+    for (var i = 0; i < sets.length; i++) {
+
+      var set = sets[i];
+      var cur_number_training_images = number_training_images_in_order[i];
+      console.log(set)
+      // key parameters
+      var category_levels = ["narrow","intermediate","broad"];
+
+      if (set == "set1") {
+        var cur_catk_n = catk_n;
+        var cur_catk_i = catk_i;
+        var cur_catk_b = catk_b;
+      } else if (set == "set2") {
+        var cur_catk_n = catk2_n;
+        var cur_catk_i = catk2_i;
+        var cur_catk_b = catk2_b;
+      }
+
+      //var correct_category_label_levels = create_correct_category_labels(n_cat_level,i_cat_level,b_cat_level);
+      var correct_category_label_levels = create_correct_category_labels("","","");
+      console.log(correct_category_label_levels);
+      var cur_category_kinds = category_kinds[set];
+      console.log(cur_category_kinds);
+      var randomized_category_kinds = create_category_kinds(cur_category_kinds,cur_catk_n,cur_catk_i,cur_catk_b);
+      console.log(randomized_category_kinds);
     
+      var training_types = get_training_types(randomized_category_kinds,training_labels,correct_category_label_levels);
+      var trial_order = get_trial_order(category_levels);
 
-    var training_types = get_training_types(randomized_category_kinds,training_labels,alternate_training_labels,correct_category_label_levels);
-		var trial_order = get_trial_order(category_levels);
+      console.log(training_types)
+      console.log(trial_order)
 
-		console.log(training_types)
-		console.log(trial_order)
+      var cur_block = generate_all_blocks(trial_order,training_types,set,cur_number_training_images);
 
-    var all_blocks = generate_all_blocks(trial_order,training_types);
+      timeline = timeline.concat(cur_block);
+    };
 
-    timeline = timeline.concat(all_blocks);
 
     console.log(timeline)
 
