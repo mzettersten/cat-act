@@ -2,7 +2,7 @@
 function generate_learning_instructions(current_training_label, current_training_images,number_training_images=3) {
     var current_learning_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
     if (number_training_images == 1) {
-    current_learning_stimulus+='<p><b><font size="4.5">This is '+current_training_label+'.</font></b><style="text-align:center;" /p>';
+    current_learning_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
     current_learning_stimulus+='<div class="row">';
     current_learning_stimulus+='<div class="column"><figure style="opacity:0"><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
     current_learning_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:50%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
@@ -48,7 +48,7 @@ function generate_sampling_instructions(current_training_label, current_training
 
   var current_sampling_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>'
   if (number_training_images == 1) {
-  current_sampling_stimulus+='<p><b><font size="4.5">This is '+current_training_label+'.</font></b><style="text-align:center;" /p>';
+  current_sampling_stimulus+='<p><b><font size="4.5">This is a '+current_training_label+'.</font></b><style="text-align:center;" /p>';
   current_sampling_stimulus+='<div class="row">';
    current_sampling_stimulus+='<div class="column"><figure style="opacity:0"><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
     current_sampling_stimulus+='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:50%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
@@ -68,11 +68,16 @@ function generate_sampling_instructions(current_training_label, current_training
   return(current_sampling_stimulus)
 }
 
-function generate_selection_instructions(current_training_label, current_sampling_label,current_training_images,current_sampling_image,number_training_images=3) {
+function generate_selection_instructions(current_training_label, current_sampling_label,sampled_label_consistent,current_training_images,current_sampling_image,number_training_images=3) {
 
   //var current_selection_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>';
   var current_selection_stimulus = '<div id="container">'
-  current_selection_stimulus += '<p><b><font size="4.5">The image you selected is <span style="color:#ff0000"><u>'+current_sampling_label+'</u></span>.</font></b><style="text-align:center;" /p>'
+  if (sampled_label_consistent == 1) {
+    current_selection_stimulus += '<p><b><font size="4.5">The image you selected is a <span style="color:#ff0000"><u>'+current_sampling_label+'</u></span>.</font></b><style="text-align:center;" /p>'
+  } else {
+    current_selection_stimulus += '<p><b><font size="4.5">The image you selected is <span style="color:#ff0000"><u>'+current_sampling_label+'</u></span>.</font></b><style="text-align:center;" /p>'
+  
+  }
   current_selection_stimulus += '<div class="row">';
   if (number_training_images == 1) {
    current_selection_stimulus+='<div class="column"><figure style="opacity:0"><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
@@ -308,12 +313,25 @@ function generate_block(trial, training_types, set,number_training_images) {
         last_trial_data = jsPsych.data.get().last(1).values()[0];
         trial.data.sampled_image = last_trial_data.shuffled_sampling_images[last_trial_data.response];
         trial.data.sampled_label = last_trial_data.sampling_image_words[last_trial_data.response];
+        console.log(last_trial_data.current_training_label);
+        if (trial.data.sampled_label ==  last_trial_data.current_training_label) {
+          trial.data.label_consistent = 1;
+        } else {
+          trial.data.label_consistent = 0;
+        }
       },
     stimulus: function() {
       last_trial_data = jsPsych.data.get().last(1).values()[0];
+      if (last_trial_data.sampling_image_words[last_trial_data.response] ==  last_trial_data.current_training_label) {
+          label_consistent = 1;
+        } else {
+          label_consistent = 0;
+        }
+        console.log(label_consistent);
       return generate_selection_instructions(
         last_trial_data.current_training_label, 
         last_trial_data.sampling_image_words[last_trial_data.response],
+        label_consistent,
         last_trial_data.current_training_images,
         last_trial_data.shuffled_sampling_images[last_trial_data.response],
         number_training_images)
@@ -488,7 +506,7 @@ var debrief_questions = {
     type: 'survey-text',
     questions: [
     {prompt: "Did you use a strategy to figure out what each word meant? If yes, please explain",name: "strategy", rows: 3,columns: 60, required: true},
-    {prompt: "After seeing a new word and the first three examples, how did you choose which (fourth) object to see a word for next?",name: "choice_strategy", rows: 3,columns: 60, required: true},
+    {prompt: "After seeing a new word and the first example(s), how did you choose which (new) object to see a word for next?",name: "choice_strategy", rows: 3,columns: 60, required: true},
     {prompt: "Any additional comments?", name: "comments", rows: 3,columns: 60}
     ],
 

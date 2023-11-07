@@ -153,7 +153,7 @@
 
     var set_size = 2;
 
-    var training_labels = ["a sibu","a kita","a beppo","a tibble", "a roozer", "a guffy"];
+    var training_labels = ["sibu","kita","beppo","tibble", "roozer", "guffy"];
     var randomized_training_labels = jsPsych.randomization.shuffle(training_labels);
     var training_label_dict = {
       set1: [randomized_training_labels[0],randomized_training_labels[1],randomized_training_labels[2]],
@@ -253,7 +253,7 @@
       pages: [
       'Thanks for participating! In this experiment, we are interested in how people gather information to help them learn new words. Please let us know if you have any questions!'
         +"<br>" + "<br>"
-        +'<center>Your completion code/ secret key for <u>mTurk</u> is</center>'
+        +'<center>Your completion code/ secret key is</center>'
         +"<br>"
         +'<center><u><b style="font-size:20px">'+ code +'</b></u></center>'
         +"<br>"
