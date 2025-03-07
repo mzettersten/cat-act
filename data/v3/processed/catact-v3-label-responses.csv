@@ -576,3 +576,38 @@ p431002,narrow,narrow,vegetables,chilly
 p168089,intermediate,intermediate,animals,dog
 p168089,broad,hypernym,vegetables,vegetable
 p168089,narrow,broad,vehicles,bus
+p646056,narrow,intermediate,vegetables,green pepper
+p646056,intermediate,intermediate,vehicles,bus
+p646056,broad,broad,animals,animal
+p968857,intermediate,hypernym,vegetables,pepper
+p968857,broad,broad,animals,animal
+p968857,narrow,intermediate,vehicles,vehicle
+p592137,narrow,narrow,vehicles,school bus
+p592137,broad,hypernym,animals,animal
+p592137,intermediate,hypernym,vegetables,peppers
+p412519,intermediate,broad,animals,dog
+p412519,broad,broad,vegetables,vegetable
+p412519,narrow,intermediate,vehicles,bus
+p788676,intermediate,intermediate,vehicles,vehicle
+p788676,narrow,intermediate,animals,dog
+p788676,broad,hypernym,vegetables,vegetable
+p314243,broad,broad,animals,"a dog, horse, or bunny"
+p314243,intermediate,intermediate,vehicles,a big vehicle
+p314243,narrow,broad,vegetables,a pepper
+p154000,broad,hypernym,vegetables,Long
+p154000,narrow,narrow,vehicles,"yellow
+"
+p154000,intermediate,broad,animals,"animal
+"
+p704327,narrow,broad,vehicles,bus
+p704327,intermediate,broad,vegetables,pepper
+p704327,broad,broad,animals,animal
+p638150,narrow,narrow,vegetables,green pepper
+p638150,broad,hypernym,vehicles,vehicle
+p638150,intermediate,hypernym,animals,animal
+p842529,intermediate,intermediate,vehicles,bus
+p842529,broad,hypernym,vegetables,vegetable
+p842529,narrow,broad,animals,dog
+p257826,broad,hypernym,vegetables,vegetable
+p257826,narrow,broad,animals,dog
+p257826,intermediate,broad,vehicles,bus

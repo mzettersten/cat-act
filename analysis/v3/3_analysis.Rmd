@@ -329,6 +329,23 @@ t.test(subj_sampling$mean_consistent,subj_sampling$mean_narrowly_constraining,pa
 t.test(subj_sampling$mean_consistent_adj,subj_sampling$mean_narrowly_constraining_adj,paired=T)
 ```
 
+```{r}
+sampling_data$sampled_category_level_kind_info_ord <- factor(sampling_data$sampled_category_level_kind_info,
+                                                            levels=c("sub","bas","sup","outside_category"),
+                                                             labels=c("subordinate","basic","superordinate","outside category"))
+sampling_data$current_category_training_level_ord <- factor(sampling_data$current_category_training_level,levels=c("narrow","intermediate","broad"))
+
+ggplot(sampling_data,aes(current_category_training_level_ord,fill=sampled_category_level_kind_info_ord))+
+  geom_bar(position="fill")+
+  scale_fill_brewer(name="Sampling Choice Type",palette="RdYlBu")+
+  xlab("Training Condition")+
+  ylab("Proportion of Sampling Choices")+
+  theme_cowplot(font_size=30)+
+  theme(axis.title = element_text(face="bold", size=36),
+        axis.text.x  = element_text(angle=90, hjust=1,vjust=0.4))
+```
+
+
 # Test
 
 ## Trial-by-trial model
