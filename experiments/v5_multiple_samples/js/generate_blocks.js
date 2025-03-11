@@ -38,15 +38,33 @@ function generate_check_instructions(current_training_label, current_training_im
 
 }
 
-function generate_sampling_instructions(current_training_label, current_training_images) {
+function generate_sampling_instructions(current_training_label, current_training_images, sampled_images) {
 
   var current_sampling_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>'
   current_sampling_stimulus +='<p><b><font size="4.5">These are 3 '+current_training_label+'s.</font></b><style="text-align:center;" /p>';
   current_sampling_stimulus +='<div class="row">';
-  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
-  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[1]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
-  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[2]+'" style="width:70%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
-  current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:70%;opacity:0"></div></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:45%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[1]+'" style="width:45%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[2]+'" style="width:45%"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div></div>';
+
+  if (sampled_images.length == 0) {
+    current_sampling_stimulus +='<div class="row">';
+    current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:45%;opacity:0"></div>';
+    current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:45%;opacity:0"></div>';
+    current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:45%;opacity:0"></div></div>';
+  } else if (sampled_images.length == 1) {
+    current_sampling_stimulus +='<div class="row">';
+  current_sampling_stimulus +='<div class="column"><img src="'+sampled_images[0]+'" style="width:45%"></div>';
+  current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:45%;opacity:0"></div>';
+  current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:45%;opacity:0"></div></div>';
+    
+  } else if (sampled_images.length == 2) {
+    current_sampling_stimulus +='<div class="row">';
+  current_sampling_stimulus +='<div class="column"><img src="'+sampled_images[0]+'" style="width:45%"></div>';
+  current_sampling_stimulus +='<div class="column"><img src="'+sampled_images[1]+'" style="width:45%"></div>';
+  current_sampling_stimulus +='<div class="column"><img src="'+current_training_images[0]+'" style="width:45%;opacity:0"></div></div>';
+  }
+  
   current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make one choice, so choose carefully!</font></b></p>'
   current_sampling_stimulus +='<p><i><font size="4.5">Click on the object that you would like to know the name of.</font></i><style="text-align:center;" /p>';
   //current_sampling_stimulus +='<div class="row"><div class="column"></div></div></div>';
@@ -123,6 +141,7 @@ function generate_block(trial, training_types) {
 	var current_category_training_level = current_trial_info["category_training_level"];
 	var current_category_label_level = current_trial_info["category_label_level"];
 	var current_training_image_path_info = current_trial_info["training_image_path_info"]
+  var num_sampling_trials = 3;
 
   if (current_category_kind=="vegetables") {
     var current_category_label = "c1";
@@ -195,7 +214,7 @@ function generate_block(trial, training_types) {
 
   var current_learning_stimulus = generate_learning_instructions(current_training_label, current_training_images); 
   var current_check_stimulus = generate_check_instructions(current_training_label, current_training_images); 
-	var current_sampling_stimulus = generate_sampling_instructions(current_training_label, current_training_images);
+	//var current_sampling_stimulus = generate_sampling_instructions(current_training_label, current_training_images);
 
   // display learning trial
   var learning_trial = {
@@ -216,7 +235,7 @@ function generate_block(trial, training_types) {
     },
   }
 
-  cur_block.push(learning_trial);
+  //cur_block.push(learning_trial);
 
   var check_trial = {
     type: 'survey-html-form',
@@ -233,6 +252,7 @@ function generate_block(trial, training_types) {
       current_category_kind: current_category_kind,
       current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
+      sampled_images: [],
       trial_type: "label_check"
     },
   }
@@ -242,7 +262,14 @@ function generate_block(trial, training_types) {
   // display sampling trial
   var sampling_trial = {
     type: 'html-button-response-cols',
-    stimulus: current_sampling_stimulus,
+    stimulus: function() {
+    last_trial_data = jsPsych.data.get().last(1).values()[0];
+    return generate_sampling_instructions(
+      last_trial_data.current_training_label, 
+      last_trial_data.current_training_images,
+    last_trial_data.sampled_images)
+  },
+    //stimulus: current_sampling_stimulus,
     choices: current_sample_array,
     button_html: '<button class="jspsych-btn-image-array">%choice%</button>',
     data: {
@@ -256,31 +283,21 @@ function generate_block(trial, training_types) {
       current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "sampling"
+    },
+    on_finish: function(data) {
+      console.log(data.response)
+      //get the value from the last trial
+      // has to be one step back, otherwise we're getting the choice from the current trial
+      last_trial_data = jsPsych.data.get().last(2).values()[0];
+      console.log(last_trial_data)
+      console.log(last_trial_data.sampled_images)
+      console.log(shuffled_sampling_images[data.response])
+      current_sampled_images = last_trial_data.sampled_images;
+      data.sampled_images = current_sampled_images.concat([shuffled_sampling_images[data.response]]);
+      console.log(data.sampled_images)
     }
   }
-
-  cur_block.push(sampling_trial);
-
-  var sampling_trial = {
-    type: 'html-button-response-cols',
-    stimulus: current_sampling_stimulus,
-    choices: current_sample_array,
-    button_html: '<button class="jspsych-btn-image-array">%choice%</button>',
-    data: {
-      current_training_images: current_training_images,
-      current_training_label: current_training_label,
-      shuffled_sampling_images: shuffled_sampling_images,
-      sampling_image_words: sampling_image_words,
-      shuffled_test_images: shuffled_images,
-      current_category_label_level: current_category_label_level,
-      current_category_kind: current_category_kind,
-      current_category_training_level,
-      current_alternate_training_label: current_alternate_training_label,
-      trial_type: "sampling"
-    }
-  }
-
-  cur_block.push(sampling_trial);
+  
 
    //display selection trial
    var selection_trial = {
@@ -310,10 +327,18 @@ function generate_block(trial, training_types) {
       current_category_training_level,
       current_alternate_training_label: current_alternate_training_label,
       trial_type: "sampling_feedback"
+    },
+    on_finish: function(data) {
+      last_trial_data = jsPsych.data.get().last(2).values()[0];
+      console.log(last_trial_data)
+      data.sampled_images = last_trial_data.sampled_images;
     }
   }
 
-  cur_block.push(selection_trial);
+  for (s=0;s<num_sampling_trials;s++) {
+    cur_block.push(sampling_trial);
+    cur_block.push(selection_trial);
+  }
 
   // display test trial
   var test_trial = {
