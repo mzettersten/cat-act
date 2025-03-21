@@ -8,7 +8,7 @@ function get_training_types(
 
 	//shuffle elements
 	var training_labels_shuffled = jsPsych.randomization.shuffle(training_labels);
-	var alternate_training_labels_shuffled = jsPsych.randomization.shuffle(alternate_training_labels);
+	//var alternate_training_labels_shuffled = jsPsych.randomization.shuffle(alternate_training_labels);
 
 	var training_types = {
 		narrow: {
@@ -16,7 +16,8 @@ function get_training_types(
 			category_training_level: "narrow",
 			category_label_level: correct_category_labels["narrow"],
 			training_label: training_labels_shuffled[0],
-			alternate_training_label: alternate_training_labels_shuffled[0],
+			//alternate_training_label: alternate_training_labels_shuffled[0],
+      alternate_training_label: "not a " + training_labels_shuffled[0],
 			training_image_path_info: ["sub1.jpg","sub2.jpg","sub3.jpg"]
 		},
 		intermediate: {
@@ -24,7 +25,8 @@ function get_training_types(
 			category_training_level: "intermediate",
 			category_label_level: correct_category_labels["intermediate"],
 			training_label: training_labels_shuffled[1],
-			alternate_training_label: alternate_training_labels_shuffled[1],
+			//alternate_training_label: alternate_training_labels_shuffled[1],
+      alternate_training_label: "not a " + training_labels_shuffled[1],
 			training_image_path_info: ["sub1.jpg","bas1.jpg","bas2.jpg"]
 		},
 		broad: {
@@ -32,7 +34,8 @@ function get_training_types(
 			category_training_level: "broad",
 			category_label_level: correct_category_labels["broad"],
 			training_label: training_labels_shuffled[2],
-			alternate_training_label: alternate_training_labels_shuffled[2],
+			//alternate_training_label: alternate_training_labels_shuffled[2],
+      alternate_training_label: "not a " + training_labels_shuffled[2],
 			training_image_path_info: ["sub1.jpg","sup1.jpg","sup2.jpg"]
 		}
 	};
