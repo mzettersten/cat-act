@@ -377,7 +377,9 @@ function generate_block(trial, training_types) {
 
   for (s=0;s<num_sampling_trials;s++) {
     cur_block.push(sampling_trial);
+    //if (s+1==num_sampling_trials) {
     cur_block.push(selection_trial);
+    //}
   }
 
   // display test trial
