@@ -52,19 +52,54 @@ function generate_sampling_instructions(current_training_label, current_training
     current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
     current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
     current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>'
-    current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make three choices, so choose carefully!</font></b></p>';
+    current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make THREE choices, so choose carefully!</font></b></p>';
   } else if (sampled_images.length == 1) {
     current_sampling_stimulus +='<div class="row">';
   current_sampling_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
   current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
   current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>';
-  current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make two more choices, so choose carefully!</font></b></p>'; 
+  current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make TWO more choices, so choose carefully!</font></b></p>'; 
   } else if (sampled_images.length == 2) {
     current_sampling_stimulus +='<div class="row">';
   current_sampling_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
   current_sampling_stimulus +='<div class="column"><figure><img src="'+sampled_images[1]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[1]+'</figcaption></figure></div>';
   current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>';
-  current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make one more choice, so choose carefully!</font></b></p>'; 
+  current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make ONE more choice, so choose carefully!</font></b></p>'; 
+  }
+  
+  //current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make one choice, so choose carefully!</font></b></p>'
+  current_sampling_stimulus +='<p><i><font size="4.5">Click on the object that you would like to know the name of.</font></i><style="text-align:center;" /p>';
+  //current_sampling_stimulus +='<div class="row"><div class="column"></div></div></div>';
+  return(current_sampling_stimulus)
+}
+
+function generate_sampling_instructions(current_training_label, current_training_images, sampled_images,sampled_labels) {
+
+  var current_sampling_stimulus = '<div id="container"><p><b><font size="4.5">Your job is to figure out which objects are '+current_training_label+'s and which are not.</font></b><style="text-align:center;" /p>'
+  current_sampling_stimulus +='<p><b><font size="4.5">These are 3 '+current_training_label+'s.</font></b><style="text-align:center;" /p>';
+  current_sampling_stimulus +='<div class="row">';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[1]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+current_training_images[2]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+current_training_label+'</figcaption></figure></div></div>';
+
+  if (sampled_images.length == 0) {
+    current_sampling_stimulus +='<div class="row">';
+    current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
+    current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
+    current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>'
+    current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make THREE choices, so choose carefully!</font></b></p>';
+  } else if (sampled_images.length == 1) {
+    current_sampling_stimulus +='<div class="row">';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>';
+  current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make TWO more choices, so choose carefully!</font></b></p>'; 
+  } else if (sampled_images.length == 2) {
+    current_sampling_stimulus +='<div class="row">';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="'+sampled_images[1]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[1]+'</figcaption></figure></div>';
+  current_sampling_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>';
+  current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make ONE more choice, so choose carefully!</font></b></p>'; 
   }
   
   //current_sampling_stimulus +='<p><b><font size="4.5">Which of these nine objects would you like to learn the name of? You can only make one choice, so choose carefully!</font></b></p>'
@@ -97,22 +132,25 @@ function generate_selection_instructions(current_training_label, current_samplin
     current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border: 5px solid #ff0000; padding: 6px; border-radius:5px"><figcaption style="font-size:24px;color:#ff0000">'+sampled_labels[0]+'</figcaption></figure></div>';
     current_selection_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div>';
     current_selection_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>';
+    current_selection_stimulus += '<div id="container"><p><b><font size="4.5">You have TWO choices left</font></b>';
+    current_selection_stimulus += '<p><i><font size="4.5">Click Next to continue.</font></i><style="text-align:center;" /p><style="text-align:center;" /p></div>';
   } else if (sampled_images.length == 2) {
     current_selection_stimulus +='<div class="row">';
     current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
     current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[1]+'" style="width:45%; border: 5px solid #ff0000; padding: 6px; border-radius:5px"><figcaption style="font-size:24px;color:#ff0000">'+sampled_labels[1]+'</figcaption></figure></div>';
     current_selection_stimulus +='<div class="column"><figure><img src="stims/background.jpg" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px;opacity:0">'+current_training_label+'</figcaption></figure></div></div>'; 
+    current_selection_stimulus += '<div id="container"><p><b><font size="4.5">You have ONE choice left</font></b>';
+    current_selection_stimulus += '<p><i><font size="4.5">Click Next to continue.</font></i><style="text-align:center;" /p><style="text-align:center;" /p></div>';
   } else if (sampled_images.length == 3) {
     current_selection_stimulus +='<div class="row">';
-    current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
-    current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[1]+'" style="width:45%"; border-radius:5px><figcaption style="font-size:24px">'+sampled_labels[1]+'</figcaption></figure></div>';
+    current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[0]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[0]+'</figcaption></figure></div>';
+    current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[1]+'" style="width:45%; border:2px solid; border-radius:5px"><figcaption style="font-size:24px">'+sampled_labels[1]+'</figcaption></figure></div>';
     current_selection_stimulus +='<div class="column"><figure><img src="'+sampled_images[2]+'" style="width:45%; border-radius:5px; border: 5px solid #ff0000; padding: 6px"><figcaption style="font-size:24px;color:#ff0000">'+sampled_labels[2]+'</figcaption></figure></div></div>'; 
+    current_selection_stimulus += '<div id="container"><p><b><font size="4.5">Next, you will see a set of 24 new objects and decide which of them are '+current_training_label+'s.</font></b></p>';
+    current_selection_stimulus += '<div id="container"><p><b><font size="4.5">Your goal is to select <u>all</u> of the '+current_training_label+'s.</font></b></p>';
+    current_selection_stimulus += '<p><i><font size="4.5">Click Next to continue.</font></i><style="text-align:center;" /p><style="text-align:center;" /p></div>';
   
 }
-  
-current_selection_stimulus += '<div id="container"><p><b><font size="4.5">Next, you will see a set of 24 new objects and decide which of them are '+current_training_label+'s.</font></b>';
-  current_selection_stimulus += '<div id="container"><p><b><font size="4.5">Your goal is to select <u>all</u> of the '+current_training_label+'s.</font></b>';
-  current_selection_stimulus += '<p><i><font size="4.5">Click Next to continue.</font></i><style="text-align:center;" /p><style="text-align:center;" /p></div>';
   
   return(current_selection_stimulus)
 }
