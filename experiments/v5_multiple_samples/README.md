@@ -2,8 +2,4 @@
 
 Experiment on actively sampling to learn word extensions
 
-## Folder structure
-
-- analysis
-- data
-- experiments
+Version 5: allowing learners to make multiple samples
